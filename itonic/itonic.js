@@ -67,17 +67,17 @@ function it_hold_request(arr, url) {
     var queryStart = url.indexOf("?") + 1;
     var queryEnd = url.indexOf("#") + 1 || url.length + 1;
     var query = url.slice(queryStart, queryEnd - 1);
-    
+
     if (query + '#' === url || query === url || query === "") return;
-    
+
     var pairs = query.replace(/\+/g, " ").split("&");
-    var params = {};    
-    
+    var params = {};
+
     pairs.forEach(function(val){
         var indval = val.split("=", 2);
         var indname = decodeURIComponent(indval[0]);
         var value = decodeURIComponent(indval[1]);
-        
+
         if(arr){
             if (!params.hasOwnProperty(indname)) params[indname] = [];
             params[indname].push(value);
@@ -90,13 +90,12 @@ function it_hold_request(arr, url) {
 
 //itonic modal html and css appending with the exixting html document
 $(function () {
-    $('head').append("<style>#iM_{display:none;position:fixed;z-index:100001;padding-top: 100px;left:0;top:0;font-family: sans-serif;font-size: 12pt;width:100%;height:100%;overflow:auto;background-color:rgb(0,0,0);}#iM_-content{display:none;position:relative;margin:auto;padding:0;border:1px solid #bfbfbf;box-shadow:0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);}#iM_-close{float:right;font-size:28px;font-weight:bold;margin-top:-10px;cursor:pointer;}#iM_-header{box-sizing: border-box;padding:9px 10px;color:white;height:40px;}#iM_-header h3{margin:0px;font-family: sans-serif;font-size: 1.17em;}#iM_-body{padding:10px 10px;}#iM_-footer{box-sizing: border-box;padding:7px 16px;height:40px;}#iM_-footer button{border: 1px solid #b7b5b5;margin-left: 5px;font-weight:400;float:right;min-width:60px;height:26px;line-height:23px;vertical-align:middle;font-size:10pt;cursor:pointer;display:none;}#iM_-footer button:hover{border-color:#918d8d;}#iM_-msg{display:none;color:white;z-index:2147483647;margin:auto;font-family:sans-serif;font-size:20pt;text-align:center;position:fixed;top:calc(50% - 130px);left:0;right:0;}#iM_-loadspinner{display:none;height: 100px;width: 100px;z-index:2147483647;position:fixed;background-position: center;background-repeat: no-repeat;background-size: 100%;left:0;right:0;top:calc(50% - 50px);margin:auto;}@keyframes iM_Round{from{transform: rotate(0deg)}to{transform: rotate(360deg)}}</style>");
     $('body').append("<div id='iM_'><div id='iM_-loadspinner'></div><div id='iM_-msg'></div><div id='iM_-content'><div id='iM_-header'><span id='iM_-close'>&#10006;</span><h3></h3></div><div id='iM_-body'></div><div id='iM_-footer'><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button></div></div></div>");
 });
 
 //itonic modal executor
 function it_modal_execute(obj) {
-    
+
 
     //headerText:           =>Header text
     //headerTextColor:      =>Header Text Color
@@ -114,10 +113,10 @@ function it_modal_execute(obj) {
     //draggable:            =>boolean value true or false
     //aeris                 =>boolean value ture or false
     //action:               =>Make a function with a variable. variable will return the value of button text at onClick button. Calcel button will return boolean false.
-    
-    
+
+
     if(typeof obj != 'object') obj = {};
-    
+
     {
         var n_ = $('#iM_-content');
         var h_ = $('#iM_-header');
@@ -125,7 +124,7 @@ function it_modal_execute(obj) {
         var f_ = $('#iM_-footer');
         var b_ = $('#iM_-footer button');
     }
-    
+
     // Controlling buttons
     if(typeof obj.createButton == 'string'){
          var btnAll = obj.createButton.split(',').reverse();
@@ -137,8 +136,8 @@ function it_modal_execute(obj) {
             }
         });
     }
-   
-    
+
+
     // Add Custom Header
     if (typeof obj.headerText == 'string') ht_.html(obj.headerText);
     else console.log('Warning: headerText is undefined or not string!');
@@ -261,8 +260,8 @@ function it_modal_execute(obj) {
     if (obj.draggable == true){
         if(typeof $.fn.draggable == 'function') n_.draggable({cancel : '#iM_-body'});
         else console.log('Error: Required jquery-ui with draggable function!');
-    } 
-    
+    }
+
     // Display the Modal Bacground
     {
         $('#iM_').css({
@@ -278,7 +277,7 @@ function it_modal_execute(obj) {
             'display': 'none'
         });
     }
-    
+
     $('#iM_-close').unbind('click');
     $('#iM_-close').click(function () {
         if( !(rv_ = it_modal_close()) && typeof(obj.action)=='function') obj.action(rv_);
@@ -292,14 +291,14 @@ function it_modal_execute(obj) {
 
 //itonic modal loading executor for graphical loading view
 function it_modal_onduty(obj) {
-    
+
     //message           =>Loading window message text in html format
     //messageColor      =>
     //graphics          =>Loading window animation graphics link
     //backLayerColor:   =>Modal back layer color
-    
+
     if(typeof obj != 'object') obj = {};
-    
+
     if(typeof obj.backLayerColor == 'string' && it_is_color(obj.backLayerColor)){
         $('#iM_').css({
             'background-color': obj.backLayerColor
@@ -318,14 +317,14 @@ function it_modal_onduty(obj) {
             'color': 'white'
         });
     }
-    
+
     if ((typeof obj.message) == 'string') {
         $('#iM_-msg').html(obj.message);
     }
     else {
         $('#iM_-msg').html("Execution is in progress....<br/>Please Wait !");
     }
-    
+
     if ((typeof obj.graphics) == 'string') {
         $('#iM_-loadspinner').css({
             'border': 'none',
