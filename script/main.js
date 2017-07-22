@@ -1,9 +1,11 @@
-/*
 $(function () {
     $('#btn-modal').click(function () {
+        itonic.modal.execute({
+            createButton: "yes, No"
+        });
         //alert();
-        it_modal_open();
+        //console.log(it.modal().execute());
     });
-});*/
+});
 
 

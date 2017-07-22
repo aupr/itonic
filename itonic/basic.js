@@ -90,7 +90,7 @@ function it_hold_request(arr, url) {
 
 //itonic modal html and css appending with the exixting html document
 $(function () {
-    $('body').append("<div id='iM_'><div id='iM_-loadspinner'></div><div id='iM_-msg'></div><div id='iM_-content'><div id='iM_-header'><span id='iM_-close'>&#10006;</span><h3></h3></div><div id='iM_-body'></div><div id='iM_-footer'><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button></div></div></div>");
+    $('body').append("<div id='itonicModal'><div id='iM_-loadspinner'></div><div id='iM_-msg'></div><div id='iM_-content'><div id='iM_-header'><span id='iM_-close'>&#10006;</span><h3></h3></div><div id='iM_-body'></div><div id='iM_-footer'><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button></div></div></div>");
 });
 
 //itonic modal executor
@@ -158,11 +158,11 @@ function it_modal_execute(obj) {
     // setup color of the modal
     {
         if(typeof obj.backLayerColor == 'string' && it_is_color(obj.backLayerColor)){
-            $('#iM_').css({
+            $('#itonicModal').css({
                 'background-color': obj.backLayerColor
             });
         }else{
-            $('#iM_').css({
+            $('#itonicModal').css({
                 'background-color': 'rgba(0,0,0,0.4)'
             });
         }
@@ -264,7 +264,7 @@ function it_modal_execute(obj) {
 
     // Display the Modal Bacground
     {
-        $('#iM_').css({
+        $('#itonicModal').css({
             'display': 'block'
         });
         n_.css({
@@ -300,11 +300,11 @@ function it_modal_onduty(obj) {
     if(typeof obj != 'object') obj = {};
 
     if(typeof obj.backLayerColor == 'string' && it_is_color(obj.backLayerColor)){
-        $('#iM_').css({
+        $('#itonicModal').css({
             'background-color': obj.backLayerColor
         });
     }else{
-        $('#iM_').css({
+        $('#itonicModal').css({
             'background-color': 'rgba(0,0,0,0.4)'
         });
     }
@@ -342,7 +342,7 @@ function it_modal_onduty(obj) {
             , 'animation': 'iM_Round 2s linear infinite'
         });
     }
-    $('#iM_').css({
+    $('#itonicModal').css({
         'display': 'block'
     });
     $('#iM_-content').css({
@@ -363,7 +363,7 @@ function it_modal_close() {
     $("#iM_-footer button").css({
         'display': 'none'
     });
-    $('#iM_').css({
+    $('#itonicModal').css({
         'display': 'none'
     });
     $('#iM_-content').css({
