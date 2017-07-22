@@ -1,0 +1,25 @@
+<div id='iM_'>
+        <div id='iM_-loadspinner'></div>
+        <div id='iM_-msg'></div>
+        <div id='iM_-content'>
+            <div id='iM_-header'>
+                <span id='iM_-close'>
+                    &#10006;
+                </span>
+                <h3></h3>
+            </div>
+            <div id='iM_-body'> </div>
+            <div id='iM_-footer'>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+            </div>
+        </div>
+    </div>
