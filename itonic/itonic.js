@@ -119,19 +119,40 @@
 
 
     var
-        modal= {},
+        modal = {},
         modalSelector = {
-            modal: $("#itonicModal"),
-            loadSpinner: $("#iM_loadspinner"),
-            loadMsg: $("#iM_-msg"),
-            content: $("#iM_-content"),
-            header: $("#iM_-header"),
-            closeSpan: $("#iM_-close"),
-            h3Text: $("#iM_-header h3"),
-            body: $("#iM_-body"),
-            footer: $("#iM_-footer"),
-            footerButton: function (nthChild) {
-                return $("#iM_-footer button:nth-child("+(nthChild+1)+")");
+            modal: function () {
+                return $('#itonicModal');
+            },
+            loadSpinner: function () {
+                return $("#iM_loadspinner");
+            },
+            loadMsg: function () {
+                return $("#iM_-msg");
+            },
+            content: function () {
+                return $("#iM_-content");
+            },
+            header: function () {
+                return $("#iM_-header");
+            },
+            closeSpan: function () {
+                return $("#iM_-close");
+            },
+            headerH3: function () {
+                return $("#iM_-header h3");
+            },
+            body: function () {
+                return $("#iM_-body");
+            },
+            footer: function () {
+                return $("#iM_-footer");
+            },
+            footerButton: function () {
+                return $("#iM_-footer button");
+            },
+            footerButtonChild: function (nthChild) {
+                return $("#iM_-footer button:nth-child("+nthChild+")");
             }
         };
 
@@ -151,203 +172,94 @@
         //buttonTextColor:      =>Button text color
         //backLayerColor:       =>Modal back layer color
         //draggable:            =>boolean value true or false
-        //aeris                 =>boolean value ture or false
+        //aeris                 =>boolean value ture or false --(deprecated)
         //action:               =>Make a function with a variable. variable will return the value of button text at onClick button. Calcel button will return boolean false.
 
 
         if(typeof propertyObject !== 'object') propertyObject = {};
 
+        var defaultObj = {
+            headerText: "Dialog Form.",
+            headerTextColor: "#FFFFFF",
+            headerColor: "#919191",
+            footerColor: "#919191",
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: "",
+            bodyColor: "#FFFFFF",
+            width: "400px",
+            createButton: "",
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true
+            };
+
         var obj = {
-            headerText: typeof propertyObject.headerText === "string"?propertyObject.headerText:"",
-            headerTextColor: itonic.isColor(propertyObject.headerTextColor)?propertyObject.headerTextColor:"",
-            headerColor: itonic.isColor(propertyObject.headerColor)?propertyObject.headerColor:"",
-            footerColor: itonic.isColor(propertyObject.footerColor)?propertyObject.footerColor:"",
+            headerText: typeof propertyObject.headerText === "string"?propertyObject.headerText:defaultObj.headerText,
+            headerTextColor: itonic.isColor(propertyObject.headerTextColor)?propertyObject.headerTextColor:defaultObj.headerTextColor,
+            headerColor: itonic.isColor(propertyObject.headerColor)?propertyObject.headerColor:defaultObj.headerColor,
+            footerColor: itonic.isColor(propertyObject.footerColor)?propertyObject.footerColor:defaultObj.footerColor,
             color: itonic.isColor(propertyObject.color)?propertyObject.color:"",
-            crossButtonColor: itonic.isColor(propertyObject.crossButtonColor)?propertyObject.crossButtonColor:"",
-            bodyHtml: typeof propertyObject.bodyHtml === "string"?propertyObject.bodyHtml:"",
-            bodyColor: itonic.isColor(propertyObject.bodyColor)?propertyObject.bodyColor:"",
-            width: itonic.isPixel(propertyObject.width)?propertyObject.width:"",
-            createButton: typeof propertyObject.createButton === "string"?propertyObject.createButton:"",
-            buttonColor: itonic.isColor(propertyObject.buttonColor)?propertyObject.buttonColor:"",
-            buttonTextColor: itonic.isColor(propertyObject.buttonTextColor)?propertyObject.buttonTextColor:"",
-            backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:"",
-            draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:true,
-            aeris: typeof propertyObject.aeris === "boolean"?propertyObject.aeris:false,
-            action: typeof propertyObject.action === "object"?propertyObject.action:""
+            crossButtonColor: itonic.isColor(propertyObject.crossButtonColor)?propertyObject.crossButtonColor:defaultObj.crossButtonColor,
+            bodyHtml: typeof propertyObject.bodyHtml === "string"?propertyObject.bodyHtml:defaultObj.bodyHtml,
+            bodyColor: itonic.isColor(propertyObject.bodyColor)?propertyObject.bodyColor:defaultObj.bodyColor,
+            width: itonic.isPixel(propertyObject.width)?propertyObject.width:defaultObj.width,
+            createButton: typeof propertyObject.createButton === "string"?propertyObject.createButton:defaultObj.createButton,
+            buttonColor: itonic.isColor(propertyObject.buttonColor)?propertyObject.buttonColor:defaultObj.buttonColor,
+            buttonTextColor: itonic.isColor(propertyObject.buttonTextColor)?propertyObject.buttonTextColor:defaultObj.buttonTextColor,
+            backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:defaultObj.backLayerColor,
+            draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:defaultObj.draggable
         };
-
-        obj.headerText = typeof propertyObject.headerText === "string"?propertyObject.headerText:"";
-
-        {
-            var n_ = $('#iM_-content');
-            var h_ = $('#iM_-header');
-            var ht_ = $('#iM_-header h3');
-            var f_ = $('#iM_-footer');
-            var b_ = $('#iM_-footer button');
-        }
 
         // Controlling buttons
         if(typeof obj.createButton === 'string'){
             var btnAll = obj.createButton.split(',').reverse();
             btnAll.forEach(function(b,i){
-                if(modalSelector.footerButton(i).length){
-                    modalSelector.footerButton(i).text(b.trim()).css({
+                if(modalSelector.footerButtonChild(i+1).length){
+                    modalSelector.footerButtonChild(i+1).text(b.trim()).css({
                         'display':'block'
                     });
                 }
             });
         }
 
-
-        // Add Custom Header
-        if (typeof obj.headerText == 'string') ht_.html(obj.headerText);
-        else console.log('Warning: headerText is undefined or not string!');
-        // Add custom Boday
-        if (typeof obj.bodyHtml == 'string') $('#iM_-body').html(obj.bodyHtml);
-        else console.log('Warning: bodyHtml is undefined or not string!');
-
-        // setup width of the modal
-        if (typeof obj.width == 'string' && itonic.isColor(obj.width)) {
-            n_.css({
-                'width': obj.width
-            });
+        modalSelector.headerH3().html(obj.headerText);
+        modalSelector.body().html(obj.bodyHtml);
+        modalSelector.content().css({'width': obj.width});
+        modalSelector.modal().css({"background-color": obj.backLayerColor});
+        modalSelector.content().css({"background-color": obj.bodyColor});
+        if (obj.color === ""){
+            modalSelector.header().css({"background-color": obj.headerColor});
+            modalSelector.footer().css({"background-color": obj.footerColor});
         } else {
-            n_.css({
-                'width': '400px'
-            });
+            modalSelector.header().css({"background-color": obj.color});
+            modalSelector.footer().css({"background-color": obj.color});
         }
-        // setup color of the modal
-        {
-            if(typeof obj.backLayerColor == 'string' && itonic.isColor(obj.backLayerColor)){
-                $('#itonicModal').css({
-                    'background-color': obj.backLayerColor
-                });
-            }else{
-                $('#itonicModal').css({
-                    'background-color': 'rgba(0,0,0,0.4)'
-                });
-            }
-            if(typeof obj.bodyColor == 'string' && itonic.isColor(obj.bodyColor)){
-                n_.css({
-                    'background-color': obj.bodyColor
-                });
-            }else{
-                n_.css({
-                    'background-color': 'white'
-                });
-            }
-            if(typeof obj.color == 'string' && itonic.isColor(obj.color)){
-                h_.css({
-                    'background-color': obj.color
-                });
-                f_.css({
-                    'background-color': obj.color
-                });
-            }else{
-                if(typeof obj.headerColor == 'string' && itonic.isColor(obj.headerColor)){
-                    h_.css({
-                        'background-color': obj.headerColor
-                    });
-                }else{
-                    h_.css({
-                        'background-color': 'gray'
-                    });
-                }
-                if(typeof obj.footerColor == 'string' && itonic.isColor(obj.footerColor)){
-                    f_.css({
-                        'background-color': obj.footerColor
-                    });
-                }else{
-                    f_.css({
-                        'background-color': 'gray'
-                    });
-                }
-            }
-            if(typeof obj.crossButtonColor == 'string' && itonic.isColor(obj.crossButtonColor)){
-                $('#iM_-close').css({
-                    'color': obj.crossButtonColor
-                });
-            }else{
-                $('#iM_-close').css({
-                    'color': 'white'
-                });
-            }
-            if(typeof obj.buttonColor == 'string' && itonic.isColor(obj.buttonColor)){
-                b_.css({
-                    'background-color': obj.buttonColor
-                });
-            }else{
-                b_.css({
-                    'background-color': 'white'
-                });
-            }
-            if(typeof obj.buttonTextColor == 'string' && itonic.isColor(obj.buttonTextColor)){
-                b_.css({
-                    'color': obj.buttonTextColor
-                });
-            }else{
-                b_.css({
-                    'color': '#444'
-                });
-            }
-            if(typeof obj.headerTextColor == 'string' && itonic.isColor(obj.headerTextColor)){
-                ht_.css({
-                    'color': obj.headerTextColor
-                });
-            }else{
-                ht_.css({
-                    'color': 'white'
-                });
-            }
-        }
-        // aeris design
-        if (obj.aeris == true){
-            n_.css({
-                'border-radius':'7px'
-            });
-            h_.css({
-                'border-top-left-radius':'6px',
-                'border-top-right-radius':'6px'
-            });
-            f_.css({
-                'border-bottom-left-radius':'6px',
-                'border-bottom-right-radius':'6px'
-            });
-            b_.css({
-                'border-radius':'4px'
-            });
-        }
-        // Making Draggable the modal section
-        if (obj.draggable == true){
-            if(typeof $.fn.draggable == 'function') n_.draggable({cancel : '#iM_-body'});
-            else console.log('Error: Required jquery-ui with draggable function!');
+        modalSelector.headerH3().css({"color": obj.headerTextColor});
+        modalSelector.closeSpan().css({"color": obj.crossButtonColor});
+        modalSelector.footerButton().css({'background-color': obj.buttonColor, 'color': obj.buttonTextColor});
+
+        // Making draggable the modal section
+        if (obj.draggable === true){
+            if(typeof $.fn.draggable === 'function') modalSelector.content().draggable({cancel : '#iM_-body'});
+            else console.warn('Missing jQuery-ui draggable function!');
         }
 
-        // Display the Modal Bacground
-        {
-            $('#itonicModal').css({
-                'display': 'block'
-            });
-            n_.css({
-                'display': 'block'
-            });
-            $('#iM_-loadspinner').css({
-                'display': 'none'
-            });
-            $('#iM_-msg').css({
-                'display': 'none'
-            });
-        }
+        modalSelector.modal().css({'display': 'block'});
+        modalSelector.content().css({'display': 'block'});
+        modalSelector.loadSpinner().css({'display': 'none'});
+        modalSelector.loadMsg().css({'display': 'none'});
 
-        $('#iM_-close').unbind('click');
-        $('#iM_-close').click(function () {
-            var rv_;
-            if( !(rv_ = it_modal_close()) && typeof(obj.action)=='function') obj.action(rv_);
+        modalSelector.closeSpan().unbind('click');
+        modalSelector.closeSpan().click(function () {
+            if(typeof obj.action === 'function') obj.action(false);
+            else console.error('Action method has not been defined!');
         });
-        b_.unbind('click');
-        b_.click(function () {
-            if(typeof(obj.action)=='function') obj.action($(this).text());
-            else console.log('Error: action function is not defined!');
+
+        modalSelector.footerButton().unbind('click');
+        modalSelector.footerButton().click(function () {
+            if(typeof obj.action === 'function') obj.action($(this).text());
+            else console.error('Action method has not been defined!');
         });
     };
 
@@ -356,6 +268,7 @@
     window.iTonic = window.itonic = window.it = itonic;
 
     return itonic;
+
 }, function () {
     var helperFunctions = {};
 
