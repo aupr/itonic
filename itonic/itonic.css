@@ -75,6 +75,20 @@
   left: 0;
   right: 0; }
 
+#iM_-loadspinner {
+  display: none;
+  height: 100px;
+  width: 100px;
+  z-index: 2147483647;
+  position: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  left: 0;
+  right: 0;
+  top: calc(50% - 50px);
+  margin: auto; }
+
 @keyframes iM_Round {
   from {
     transform: rotate(0deg); }

@@ -20,6 +20,9 @@
 
     /* pixel verification method*/
     itonic.isPixel = function (pixel) {
+        if (pixel === "undefined") {
+            return false;
+        }
         if (pixel === "") {
             return false;
         }
@@ -42,6 +45,9 @@
 
     /* Color verification method*/
     itonic.isColor = function (color) {
+        if (color === "undefined") {
+            return false;
+        }
         if (color === "") {
             return false;
         }
@@ -63,7 +69,7 @@
     };
 
     /* Text special character to entity conversion*/
-    itonic.toEntity = function(text) {
+    itonic.CCToEntity = function(text) {
         text.trim();
         var map = {
             '&': '&amp;',
@@ -80,13 +86,13 @@
      @urlWithQuery: Don't need give any url as input for current location.
      @isArray: it should be true if there is any array in the uri query otherwise skip it or put false
      */
-    itonic.getURIQuery = function (considerArray, urlWithQuery) {
-        if(typeof urlWithQuery !== 'string') urlWithQuery = window.location.href;
-        var queryStart = urlWithQuery.indexOf("?") + 1;
-        var queryEnd = urlWithQuery.indexOf("#") + 1 || urlWithQuery.length + 1;
-        var query = urlWithQuery.slice(queryStart, queryEnd - 1);
+    itonic.getURIQuery = function (considerArray, url) {
+        if(typeof url !== 'string') url = window.location.href;
+        var queryStart = url.indexOf("?") + 1;
+        var queryEnd = url.indexOf("#") + 1 || url.length + 1;
+        var query = url.slice(queryStart, queryEnd - 1);
 
-        if (query + '#' === urlWithQuery || query === urlWithQuery || query === "") return;
+        if (query + '#' === url || query === url || query === "") return;
 
         var pairs = query.replace(/\+/g, " ").split("&");
         var params = {};
@@ -120,12 +126,12 @@
 
     var
         modal = {},
-        modalSelector = {
+        modalElements = {
             modal: function () {
-                return $('#itonicModal');
+                return $("#itonicModal");
             },
             loadSpinner: function () {
-                return $("#iM_loadspinner");
+                return $("#iM_-loadspinner");
             },
             loadMsg: function () {
                 return $("#iM_-msg");
@@ -176,91 +182,157 @@
         //action:               =>Make a function with a variable. variable will return the value of button text at onClick button. Calcel button will return boolean false.
 
 
-        if(typeof propertyObject !== 'object') propertyObject = {};
+        if(typeof propertyObject !== "object") propertyObject = {};
 
-        var defaultObj = {
-            headerText: "Dialog Form.",
-            headerTextColor: "#FFFFFF",
-            headerColor: "#919191",
-            footerColor: "#919191",
-            crossButtonColor: "#FFFFFF",
-            bodyHtml: "",
-            bodyColor: "#FFFFFF",
-            width: "400px",
-            createButton: "",
-            buttonColor: "#FFFFFF",
-            buttonTextColor: "#444444",
-            backLayerColor: "rgba(0,0,0,0.4)",
-            draggable: true
+        var
+            defaultObj = {
+                headerText: "Dialog Form.",
+                headerTextColor: "#FFFFFF",
+                headerColor: "#919191",
+                footerColor: "#919191",
+                color: undefined,
+                crossButtonColor: "#FFFFFF",
+                bodyHtml: "",
+                bodyColor: "#FFFFFF",
+                width: "400px",
+                createButton: undefined,
+                buttonColor: "#FFFFFF",
+                buttonTextColor: "#444444",
+                backLayerColor: "rgba(0,0,0,0.4)",
+                draggable: true
+            },
+            obj = {
+                headerText: typeof propertyObject.headerText === "string"?propertyObject.headerText:defaultObj.headerText,
+                headerTextColor: itonic.isColor(propertyObject.headerTextColor)?propertyObject.headerTextColor:defaultObj.headerTextColor,
+                headerColor: itonic.isColor(propertyObject.headerColor)?propertyObject.headerColor:defaultObj.headerColor,
+                footerColor: itonic.isColor(propertyObject.footerColor)?propertyObject.footerColor:defaultObj.footerColor,
+                color: itonic.isColor(propertyObject.color)?propertyObject.color:defaultObj.color,
+                crossButtonColor: itonic.isColor(propertyObject.crossButtonColor)?propertyObject.crossButtonColor:defaultObj.crossButtonColor,
+                bodyHtml: typeof propertyObject.bodyHtml === "string"?propertyObject.bodyHtml:defaultObj.bodyHtml,
+                bodyColor: itonic.isColor(propertyObject.bodyColor)?propertyObject.bodyColor:defaultObj.bodyColor,
+                width: itonic.isPixel(propertyObject.width)?propertyObject.width:defaultObj.width,
+                createButton: typeof propertyObject.createButton === "string"?propertyObject.createButton:defaultObj.createButton,
+                buttonColor: itonic.isColor(propertyObject.buttonColor)?propertyObject.buttonColor:defaultObj.buttonColor,
+                buttonTextColor: itonic.isColor(propertyObject.buttonTextColor)?propertyObject.buttonTextColor:defaultObj.buttonTextColor,
+                backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:defaultObj.backLayerColor,
+                draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:defaultObj.draggable
             };
 
-        var obj = {
-            headerText: typeof propertyObject.headerText === "string"?propertyObject.headerText:defaultObj.headerText,
-            headerTextColor: itonic.isColor(propertyObject.headerTextColor)?propertyObject.headerTextColor:defaultObj.headerTextColor,
-            headerColor: itonic.isColor(propertyObject.headerColor)?propertyObject.headerColor:defaultObj.headerColor,
-            footerColor: itonic.isColor(propertyObject.footerColor)?propertyObject.footerColor:defaultObj.footerColor,
-            color: itonic.isColor(propertyObject.color)?propertyObject.color:"",
-            crossButtonColor: itonic.isColor(propertyObject.crossButtonColor)?propertyObject.crossButtonColor:defaultObj.crossButtonColor,
-            bodyHtml: typeof propertyObject.bodyHtml === "string"?propertyObject.bodyHtml:defaultObj.bodyHtml,
-            bodyColor: itonic.isColor(propertyObject.bodyColor)?propertyObject.bodyColor:defaultObj.bodyColor,
-            width: itonic.isPixel(propertyObject.width)?propertyObject.width:defaultObj.width,
-            createButton: typeof propertyObject.createButton === "string"?propertyObject.createButton:defaultObj.createButton,
-            buttonColor: itonic.isColor(propertyObject.buttonColor)?propertyObject.buttonColor:defaultObj.buttonColor,
-            buttonTextColor: itonic.isColor(propertyObject.buttonTextColor)?propertyObject.buttonTextColor:defaultObj.buttonTextColor,
-            backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:defaultObj.backLayerColor,
-            draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:defaultObj.draggable
-        };
-
         // Controlling buttons
-        if(typeof obj.createButton === 'string'){
-            var btnAll = obj.createButton.split(',').reverse();
+        if(typeof obj.createButton === "string"){
+            var btnAll = obj.createButton.split(",").reverse();
             btnAll.forEach(function(b,i){
-                if(modalSelector.footerButtonChild(i+1).length){
-                    modalSelector.footerButtonChild(i+1).text(b.trim()).css({
-                        'display':'block'
+                if(modalElements.footerButtonChild(i+1).length){
+                    modalElements.footerButtonChild(i+1).text(b.trim()).css({
+                        "display":"block"
                     });
                 }
             });
         }
 
-        modalSelector.headerH3().html(obj.headerText);
-        modalSelector.body().html(obj.bodyHtml);
-        modalSelector.content().css({'width': obj.width});
-        modalSelector.modal().css({"background-color": obj.backLayerColor});
-        modalSelector.content().css({"background-color": obj.bodyColor});
-        if (obj.color === ""){
-            modalSelector.header().css({"background-color": obj.headerColor});
-            modalSelector.footer().css({"background-color": obj.footerColor});
+        modalElements.headerH3().html(obj.headerText);
+        modalElements.body().html(obj.bodyHtml);
+        modalElements.content().css({"width": obj.width});
+        modalElements.modal().css({"background-color": obj.backLayerColor});
+        modalElements.content().css({"background-color": obj.bodyColor});
+        if (itonic.isColor(obj.color)){
+            modalElements.header().css({"background-color": obj.color});
+            modalElements.footer().css({"background-color": obj.color});
         } else {
-            modalSelector.header().css({"background-color": obj.color});
-            modalSelector.footer().css({"background-color": obj.color});
+            modalElements.header().css({"background-color": obj.headerColor});
+            modalElements.footer().css({"background-color": obj.footerColor});
         }
-        modalSelector.headerH3().css({"color": obj.headerTextColor});
-        modalSelector.closeSpan().css({"color": obj.crossButtonColor});
-        modalSelector.footerButton().css({'background-color': obj.buttonColor, 'color': obj.buttonTextColor});
+        modalElements.headerH3().css({"color": obj.headerTextColor});
+        modalElements.closeSpan().css({"color": obj.crossButtonColor});
+        modalElements.footerButton().css({"background-color": obj.buttonColor, "color": obj.buttonTextColor});
 
         // Making draggable the modal section
         if (obj.draggable === true){
-            if(typeof $.fn.draggable === 'function') modalSelector.content().draggable({cancel : '#iM_-body'});
-            else console.warn('Missing jQuery-ui draggable function!');
+            if(typeof $.fn.draggable === "function") modalElements.content().draggable({cancel : "#iM_-body"});
+            else console.warn("Missing jQuery-ui draggable function!");
         }
 
-        modalSelector.modal().css({'display': 'block'});
-        modalSelector.content().css({'display': 'block'});
-        modalSelector.loadSpinner().css({'display': 'none'});
-        modalSelector.loadMsg().css({'display': 'none'});
+        modalElements.modal().css({"display": "block"});
+        modalElements.content().css({"display": "block"});
+        modalElements.loadSpinner().css({"display": "none"});
+        modalElements.loadMsg().css({"display": "none"});
 
-        modalSelector.closeSpan().unbind('click');
-        modalSelector.closeSpan().click(function () {
-            if(typeof obj.action === 'function') obj.action(false);
-            else console.error('Action method has not been defined!');
+        modalElements.closeSpan().unbind("click");
+        modalElements.closeSpan().click(function () {
+            if(typeof obj.action === "function") obj.action(false);
+            else console.error("Action method has not been defined!");
         });
 
-        modalSelector.footerButton().unbind('click');
-        modalSelector.footerButton().click(function () {
-            if(typeof obj.action === 'function') obj.action($(this).text());
-            else console.error('Action method has not been defined!');
+        modalElements.footerButton().unbind("click");
+        modalElements.footerButton().click(function () {
+            if(typeof obj.action === "function") obj.action($(this).text());
+            else console.error("Action method has not been defined!");
         });
+
+        return true;
+    };
+    
+    modal.loading = function (propertyObject) {
+        //message           =>Loading window message text in html format
+        //messageColor      =>
+        //graphics          =>Loading window animation graphics link
+        //backLayerColor:   =>Modal back layer color
+
+        if(typeof propertyObject !== "object") propertyObject = {};
+
+        var
+            defaultObj = {
+                message: "Execution is in progress....<br/>Please Wait !",
+                messageColor: "#FFFFFF",
+                graphics: undefined,
+                backLayerColor: "rgba(0,0,0,0.4)"
+            },
+            obj = {
+                message: typeof propertyObject.message === "string"?propertyObject.message:defaultObj.message,
+                messageColor: itonic.isColor(propertyObject.messageColor)?propertyObject.messageColor:defaultObj.messageColor,
+                graphics: typeof propertyObject.graphics === "string"?propertyObject.graphics:defaultObj.graphics,
+                backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:defaultObj.backLayerColor
+            };
+
+        modalElements.modal().css({"background-color": obj.backLayerColor});
+        modalElements.loadMsg().css({"color": obj.messageColor});
+
+        modalElements.loadMsg().html(obj.message);
+
+        if ((typeof obj.graphics) === 'string') {
+            modalElements.loadSpinner().css({
+                "border": "none",
+                "border-radius": "0",
+                "animation": "none",
+                "background-image": "url(" + obj.graphics + ")"
+            });
+        } else {
+            modalElements.loadSpinner().css({
+                "border": "5px solid white",
+                "border-top-color": "#ff7000",
+                "border-radius": "100%",
+                "background-image": "none",
+                "animation": "iM_Round 2s linear infinite"
+            });
+        }
+
+        modalElements.modal().css({"display": "block"});
+        modalElements.content().css({"display": "none"});
+        modalElements.loadSpinner().css({"display": "block"});
+        modalElements.loadMsg().css({"display": "block"});
+
+    };
+
+    modal.close = function () {
+        modalElements.headerH3().html("");
+        modalElements.body().html("");
+
+        modalElements.footerButton().css({"display":"none"});
+        modalElements.modal().css({"display": "none"});
+        modalElements.content().css({"display": "none"});
+        modalElements.loadSpinner().css({"display": "none"});
+        modalElements.loadMsg().css({"display": "none"});
+        return false;
     };
 
 
