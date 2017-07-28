@@ -20,7 +20,7 @@
 
     /* pixel verification method*/
     itonic.isPixel = function (pixel) {
-        if (pixel === "undefined") {
+        if (!pixel) {
             return false;
         }
         if (pixel === "") {
@@ -45,7 +45,7 @@
 
     /* Color verification method*/
     itonic.isColor = function (color) {
-        if (color === "undefined") {
+        if (!color) {
             return false;
         }
         if (color === "") {
@@ -272,7 +272,7 @@
         return true;
     };
     
-    modal.loading = function (propertyObject) {
+    modal.onDuty = function (propertyObject) {
         //message           =>Loading window message text in html format
         //messageColor      =>
         //graphics          =>Loading window animation graphics link
@@ -335,7 +335,114 @@
         return false;
     };
 
+    var
+        upload = {};
 
+    upload.execute = function (obj) {
+        //url:                  => target upload url
+        //file:                 => file input field id (only id is accepable no class or element)
+        //name:                 => the pass name.. ie: $_FILE['name']
+        //format:               => define acceptable file formats in a string with comma saparation.
+        //size:                 => give maximum file size in bytes.
+        //progress:             => progress function return (0 to 100 parcent value, file size loaded, total file size, remaining file size)
+        //success:              => status function return (status number, status comment/description)
+        //fail:                 => response function return the oupu from target upload url as text format.
+
+        if (typeof obj === 'object') {
+            if (typeof obj.url === 'string' && typeof obj.file === 'string') {
+                var crt = "Error: fail function is not defined!";
+                var ffc = typeof obj.fail === "function";
+                var file = document.getElementById(obj.file).files[0];
+                var fileExt = $('#' + obj.file).val().split('.').pop().toLowerCase();
+                var filesize = 10000000000; //default file size
+                if (typeof obj.size === "number") filesize = obj.size;
+                var fpname = "file"; // default file pass name
+                if (typeof obj.name === "string") fpname = obj.name;
+                //alert(file.name+" | "+file.size+" | "+file.type);
+                if ($('#' + obj.file).val().length === 0) {
+                    if (ffc) obj.fail("File input field is empty!", 3);
+                    else console.log(crt);
+                } else if (file.size > filesize) {
+                    if (ffc) obj.fail("Maximum file size is exceeded!", 5);
+                    else console.log(crt);
+                } else {
+                    var acceptableFileFormat = false;
+                    if (typeof obj.format === "string") {
+                        var fileFormats = obj.format.split(",");
+                        fileFormats.forEach(function (r) {
+                            if (r.toLowerCase().trim() === fileExt) acceptableFileFormat = true;
+                        });
+                    } else if (typeof obj.format === "undefined") {
+                        acceptableFileFormat = true;
+                    }
+                    if (acceptableFileFormat) {
+                        var formdata = new FormData();
+                        formdata.append(fpname, file);
+                        var ajax = new XMLHttpRequest();
+                        ajax.upload.addEventListener("progress", function (event) {
+                            if (event.total > 145) {
+                                if (typeof obj.progress === "function") obj.progress(Math.round((event.loaded / event.total) * 100), event.loaded, event.total, event.total - event.loaded);
+                                else console.log("Error: progress function is not defined!");
+                            }
+                        }, false);
+                        ajax.addEventListener("load", function (event) {
+                            //complete handler
+                            if (typeof obj.success === 'function') obj.success(event.target.responseText, event);
+                            else console.log("Error: success function is not defined!");
+                        }, false);
+                        ajax.addEventListener("error", function (event) {
+                            // error handler
+                            if (ffc) obj.fail(event, 1);
+                            else console.log(crt);
+                        }, false);
+                        ajax.addEventListener("abort", function (event) {
+                            // abort handler
+                            if (ffc) obj.fail(event, 2);
+                            else console.log(crt);
+                        }, false);
+                        ajax.open("POST", obj.url);
+                        ajax.send(formdata);
+                    } else {
+                        if (ffc) obj.fail("File format is not acceptable!", 4);
+                        else console.log(crt);
+                    }
+                }
+            } else {
+                console.log("Error: url or file parameter is missing in itonic upload section!");
+            }
+        } else {
+            console.log("Error: JSON parameter required for itonic upload execution!");
+        }
+    };
+
+    itonic.fullScrToggle = function (element) {
+        if(!element) element = window.document.body;
+        if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+            if (element.requestFullScreen) {
+                element.requestFullScreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullScreen) {
+                element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+            return true;
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            return false;
+        }
+    };
+
+    itonic.upload = upload;
     itonic.modal = itonic.dialog = modal;
     window.iTonic = window.itonic = window.it = itonic;
 
