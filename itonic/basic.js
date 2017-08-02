@@ -5,6 +5,9 @@
 // NB: jquery is required!
 
 //itonic pixel varifier
+
+
+
 function it_is_pixel(px_) {
     if (px_ === "") {
         return false;

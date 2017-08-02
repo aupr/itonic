@@ -199,7 +199,8 @@
                 buttonColor: "#FFFFFF",
                 buttonTextColor: "#444444",
                 backLayerColor: "rgba(0,0,0,0.4)",
-                draggable: true
+                draggable: true,
+                action: undefined
             },
             obj = {
                 headerText: typeof propertyObject.headerText === "string"?propertyObject.headerText:defaultObj.headerText,
@@ -215,7 +216,8 @@
                 buttonColor: itonic.isColor(propertyObject.buttonColor)?propertyObject.buttonColor:defaultObj.buttonColor,
                 buttonTextColor: itonic.isColor(propertyObject.buttonTextColor)?propertyObject.buttonTextColor:defaultObj.buttonTextColor,
                 backLayerColor: itonic.isColor(propertyObject.backLayerColor)?propertyObject.backLayerColor:defaultObj.backLayerColor,
-                draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:defaultObj.draggable
+                draggable: typeof propertyObject.draggable === "boolean"?propertyObject.draggable:defaultObj.draggable,
+                action: typeof propertyObject.action === "function"?propertyObject.action:defaultObj.action
             };
 
         // Controlling buttons
@@ -338,7 +340,7 @@
     var
         upload = {};
 
-    upload.execute = function (obj) {
+    upload.execute = function (propertyObject) {
         //url:                  => target upload url
         //file:                 => file input field id (only id is accepable no class or element)
         //name:                 => the pass name.. ie: $_FILE['name']
@@ -348,70 +350,92 @@
         //success:              => status function return (status number, status comment/description)
         //fail:                 => response function return the oupu from target upload url as text format.
 
-        if (typeof obj === 'object') {
-            if (typeof obj.url === 'string' && typeof obj.file === 'string') {
-                var crt = "Error: fail function is not defined!";
-                var ffc = typeof obj.fail === "function";
-                var file = document.getElementById(obj.file).files[0];
-                var fileExt = $('#' + obj.file).val().split('.').pop().toLowerCase();
-                var filesize = 10000000000; //default file size
-                if (typeof obj.size === "number") filesize = obj.size;
-                var fpname = "file"; // default file pass name
-                if (typeof obj.name === "string") fpname = obj.name;
-                //alert(file.name+" | "+file.size+" | "+file.type);
-                if ($('#' + obj.file).val().length === 0) {
-                    if (ffc) obj.fail("File input field is empty!", 3);
-                    else console.log(crt);
-                } else if (file.size > filesize) {
-                    if (ffc) obj.fail("Maximum file size is exceeded!", 5);
-                    else console.log(crt);
-                } else {
-                    var acceptableFileFormat = false;
-                    if (typeof obj.format === "string") {
-                        var fileFormats = obj.format.split(",");
-                        fileFormats.forEach(function (r) {
-                            if (r.toLowerCase().trim() === fileExt) acceptableFileFormat = true;
-                        });
-                    } else if (typeof obj.format === "undefined") {
-                        acceptableFileFormat = true;
-                    }
-                    if (acceptableFileFormat) {
-                        var formdata = new FormData();
-                        formdata.append(fpname, file);
-                        var ajax = new XMLHttpRequest();
-                        ajax.upload.addEventListener("progress", function (event) {
-                            if (event.total > 145) {
-                                if (typeof obj.progress === "function") obj.progress(Math.round((event.loaded / event.total) * 100), event.loaded, event.total, event.total - event.loaded);
-                                else console.log("Error: progress function is not defined!");
-                            }
-                        }, false);
-                        ajax.addEventListener("load", function (event) {
-                            //complete handler
-                            if (typeof obj.success === 'function') obj.success(event.target.responseText, event);
-                            else console.log("Error: success function is not defined!");
-                        }, false);
-                        ajax.addEventListener("error", function (event) {
-                            // error handler
-                            if (ffc) obj.fail(event, 1);
-                            else console.log(crt);
-                        }, false);
-                        ajax.addEventListener("abort", function (event) {
-                            // abort handler
-                            if (ffc) obj.fail(event, 2);
-                            else console.log(crt);
-                        }, false);
-                        ajax.open("POST", obj.url);
-                        ajax.send(formdata);
-                    } else {
-                        if (ffc) obj.fail("File format is not acceptable!", 4);
-                        else console.log(crt);
-                    }
-                }
+        if (typeof propertyObject !== "object") propertyObject = {};
+
+        var
+            defaultObj = {
+                url: undefined,
+                file: undefined,
+                name: "file",
+                format: undefined,
+                size: 100000000,
+                sProgress: undefined,
+                progress: undefined,
+                success: undefined,
+                fail: undefined
+            },
+            obj = {
+                url: typeof propertyObject.url === "string"?propertyObject.url:defaultObj.url,
+                file: typeof propertyObject.file === "string"?propertyObject.file:defaultObj.file,
+                name: typeof propertyObject.name === "string"?propertyObject.name:defaultObj.name,
+                format: typeof propertyObject.format === "string"?propertyObject.format:defaultObj.format,
+                size: typeof propertyObject.size === "number"?propertyObject.size:defaultObj.size,
+                sProgress: typeof propertyObject.sProgress === "function"?propertyObject.sProgress:defaultObj.sProgress,
+                progress: typeof propertyObject.progress === "function"?propertyObject.progress:defaultObj.progress,
+                success: typeof propertyObject.success === "function"?propertyObject.success:defaultObj.success,
+                fail: typeof propertyObject.fail === "function"?propertyObject.fail:defaultObj.fail
+            };
+
+        if (obj.url && obj.file) {
+            var crt = "Error: fail function is not defined!";
+            var ffc = typeof obj.fail === "function";
+            var file = document.getElementById(obj.file).files[0];
+            var fileExt = $('#' + obj.file).val().split('.').pop().toLowerCase();
+            var filesize = 10000000000; //default file size
+            if (typeof obj.size === "number") filesize = obj.size;
+            var fpname = "file"; // default file pass name
+            if (typeof obj.name === "string") fpname = obj.name;
+            //alert(file.name+" | "+file.size+" | "+file.type);
+            if ($('#' + obj.file).val().length === 0) {
+                if (ffc) obj.fail("File input field is empty!", 3);
+                else console.log(crt);
+            } else if (file.size > filesize) {
+                if (ffc) obj.fail("Maximum file size is exceeded!", 5);
+                else console.log(crt);
             } else {
-                console.log("Error: url or file parameter is missing in itonic upload section!");
+                var acceptableFileFormat = false;
+                if (typeof obj.format === "string") {
+                    var fileFormats = obj.format.split(",");
+                    fileFormats.forEach(function (r) {
+                        if (r.toLowerCase().trim() === fileExt) acceptableFileFormat = true;
+                    });
+                } else if (typeof obj.format === "undefined") {
+                    acceptableFileFormat = true;
+                }
+                if (acceptableFileFormat) {
+                    var formdata = new FormData();
+                    formdata.append(fpname, file);
+                    var ajax = new XMLHttpRequest();
+                    ajax.upload.addEventListener("progress", function (event) {
+                        if (event.total > 145) {
+                            if (typeof obj.progress === "function") obj.progress(Math.round((event.loaded / event.total) * 100), event.loaded, event.total, event.total - event.loaded);
+                            else console.log("Error: progress function is not defined!");
+                        }
+                    }, false);
+                    ajax.addEventListener("load", function (event) {
+                        //complete handler
+                        if (typeof obj.success === 'function') obj.success(event.target.responseText, event);
+                        else console.log("Error: success function is not defined!");
+                    }, false);
+                    ajax.addEventListener("error", function (event) {
+                        // error handler
+                        if (ffc) obj.fail(event, 1);
+                        else console.log(crt);
+                    }, false);
+                    ajax.addEventListener("abort", function (event) {
+                        // abort handler
+                        if (ffc) obj.fail(event, 2);
+                        else console.log(crt);
+                    }, false);
+                    ajax.open("POST", obj.url);
+                    ajax.send(formdata);
+                } else {
+                    if (ffc) obj.fail("File format is not acceptable!", 4);
+                    else console.log(crt);
+                }
             }
         } else {
-            console.log("Error: JSON parameter required for itonic upload execution!");
+            console.log("Error: url or file parameter is missing in itonic upload section!");
         }
     };
 

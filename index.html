@@ -22,9 +22,35 @@
             <!--<h1>iTonic Example</h1>-->
             <hr>
             <button id="btn-modal">iTonic Modal</button>
+            <hr>
+            <input type="file" name="fileToUpload" id="file-for-upload">
+            <button id="btn-upload">Upload</button>
+            percent uploaded <span id="upload-progress">0</span>%
         </div>
     </div>
 
+<script>
+    $("#btn-upload").click(function () {
+        it.upload.execute({
+            url: "upload.php",
+            file: "file-for-upload",
+            name: "fileToUpload",
+            format: "mp4, jpg, srt",
+            size: 1073741824,
+            progress: function (val) {
+                $("#upload-progress").text(val);
+            },
+            success: function (n,s) {
+                console.log(n);
+                console.log('success');
+            },
+            fail: function (e) {
+                console.log(e);
+                console.log('fail');
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
