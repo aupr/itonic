@@ -1,0 +1,152 @@
+<script>
+    upload.execute = function (propertyObject) {
+        //url:                  => target upload url
+        //inputFileId:                 => file input field id (only id is accepable no class or element)
+        //inputName:                 => the pass name.. ie: $_FILE['name']
+        //fileExtensions:               => define acceptable file formats in a string with comma saparation.
+        //fileSizeMax:                 => give maximum file size in bytes.
+        //filesMax:
+        //progress:             => progress function return (0 to 100 parcent value, file size loaded, total file size, remaining file size)
+        //success:              => status function return (status number, status comment/description)
+        //fail:                 => response function return the oupu from target upload url as text format.
+
+        if (typeof propertyObject !== "object") propertyObject = {};
+
+        var
+            defaultObj = {
+                targetUrl: undefined,
+                inputFileId: undefined,
+                inputName: "file",
+                format: undefined,
+                size: 100000000,
+                filesMax: 20,
+                sProgress: undefined,
+                progress: undefined,
+                success: undefined,
+                fail: undefined
+            },
+            obj = {
+                targetUrl: typeof propertyObject.targetUrl === "string"?propertyObject.targetUrl:defaultObj.targetUrl,
+                inputFileId: typeof propertyObject.inputFileId === "string"?propertyObject.inputFileId:defaultObj.inputFileId,
+                inputName: typeof propertyObject.inputName === "string"?propertyObject.inputName:defaultObj.inputName,
+                format: typeof propertyObject.format === "string"?propertyObject.format:defaultObj.format,
+                size: typeof propertyObject.size === "number"?propertyObject.size:defaultObj.size,
+                filesMax: typeof propertyObject.filesMax === "number"?propertyObject.filesMax:defaultObj.filesMax,
+                sProgress: typeof propertyObject.sProgress === "function"?propertyObject.sProgress:defaultObj.sProgress,
+                progress: typeof propertyObject.progress === "function"?propertyObject.progress:defaultObj.progress,
+                success: typeof propertyObject.success === "function"?propertyObject.success:defaultObj.success,
+                fail: typeof propertyObject.fail === "function"?propertyObject.fail:defaultObj.fail
+            },
+            invokeProgress = function (progress, event) {
+                if (obj.progress) obj.progress(progress, event);
+                //else console.error("Upload Progress function is not defined");
+            },
+            invokeSuccess = function (responseText, event) {
+                if (obj.success) obj.success(responseText, event);
+                //else console.error("Upload fail function is not defined!");
+            },
+            invokeFail = function (errorCode, comment, event) {
+                if (obj.fail) obj.fail(errorCode, comment, event);
+                //else console.error("Upload fail function is not defined!");
+            };
+
+        if (obj.targetUrl && obj.inputFileId) {
+            //var crt = "Error: fail function is not defined!";
+            //var ffc = typeof obj.fail === "function";
+            //var filesize = 10000000000; //default file size
+            //if (typeof obj.size === "number") filesize = obj.size;
+            //var fpname = "file"; // default file pass name
+            //if (typeof obj.name === "string") fpname = ;
+            //alert(file.name+" | "+file.size+" | "+file.type);
+
+            var allFiles = document.getElementById(obj.inputFileId);
+            var numberOfFiles = allFiles.files.length;
+
+            if (numberOfFiles === 0) {
+                invokeFail(3, "Empty field!", {});
+            } else if (numberOfFiles > obj.filesMax) {
+                invokeFail(6, "Files limit exceeded!", {});
+            } else {
+
+                for (var i=0; i<numberOfFiles; i++) {
+
+                    if (allFiles.files[i].size > obj.size) {
+                        invokeFail(5, "Maximum file size exceeded!", {});
+                        break;
+                    }else if (typeof obj.format === "string" && obj.format !== "") {
+                        var validExtension = false;
+                        var fileExtensions = obj.format.split(",");
+                        fileExtensions.forEach(function (extension) {
+                            if (extension.toLowerCase().trim() === allFiles.files[i].inputName.split('.').pop().toLowerCase()) {
+                                validExtension = true;
+                            }
+                        });
+                        if (!validExtension) {
+                            invokeFail(4, "Invalid file format!", {});
+                            break;
+                        }
+                    }
+                }
+
+
+            }
+
+            ///////////////////////
+
+            var file = allFiles.files[0];
+            //var fileExt = $('#' + obj.file).val().split('.').pop().toLowerCase();
+
+            if ($('#' + obj.inputFileId).val().length === 0) {
+                //invokeFail(3, "Empty field!", {});
+            } else if (file.size > obj.size) {
+                //invokeFail(5, "Maximum file size exceeded!");
+            } else {
+                /*var acceptableFileFormat = false;
+                 if (typeof obj.format === "string") {
+                 var fileFormats = obj.format.split(",");
+                 fileFormats.forEach(function (r) {
+                 if (r.toLowerCase().trim() === fileExt) acceptableFileFormat = true;
+                 });
+                 } else if (typeof obj.format === "undefined") {
+                 acceptableFileFormat = true;
+                 }*/
+                if (acceptableFileFormat) {
+                    var formdata = new FormData();
+                    formdata.append(obj.inputName, file);
+                    var ajax = new XMLHttpRequest();
+                    ajax.upload.addEventListener("progress", function (event) {
+                        if (event.total > 145) {
+                            var progress = {
+                                single: Math.round((event.loaded / event.total) * 100),
+                                multi: 4,
+                                fileTotal: 0,
+                                fileFlying: 4,
+                                fileLoaded: 3,
+                                fileRemaining: 0,
+                                loaded: event.loaded,
+                                total: event.total,
+                                remaining: (event.total - event.loaded)
+                            };
+                            invokeProgress(progress, event);
+                        }
+                    }, false);
+                    ajax.addEventListener("load", function (event) {
+                        invokeSuccess(event.target.responseText, event);
+                    }, false);
+                    ajax.addEventListener("error", function (event) {
+                        invokeFail(1, "File error!", event);
+                    }, false);
+                    ajax.addEventListener("abort", function (event) {
+                        invokeFail(2, "File aborted!", event);
+                    }, false);
+                    ajax.open("POST", obj.targetUrl);
+                    ajax.send(formdata);
+                } else {
+                    //invokeFail(4, "Invalid file format!", {});
+                }
+            }
+        } else {
+            console.log("Error: url or file parameter is missing in itonic upload section!");
+        }
+    };
+</script>

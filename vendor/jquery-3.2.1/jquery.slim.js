@@ -2155,7 +2155,7 @@ Expr = Sizzle.selectors = {
 Expr.pseudos["nth"] = Expr.pseudos["eq"];
 
 // Add button/input type pseudos
-for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {
+for ( i in { radio: true, checkbox: true, inputFileId: true, password: true, image: true } ) {
 	Expr.pseudos[ i ] = createInputPseudo( i );
 }
 for ( i in { submit: true, reset: true } ) {
@@ -3856,7 +3856,7 @@ jQuery.Deferred.exceptionHook = function( error, stack ) {
 
 	// Support: IE 8 - 9 only
 	// Console exists when dev tools are open, which can happen at any time
-	if ( window.console && window.console.warn && error && rerrorNames.test( error.name ) ) {
+	if ( window.console && window.console.warn && error && rerrorNames.test( error.inputName ) ) {
 		window.console.warn( "jQuery.Deferred exception: " + error.message, error.stack, stack );
 	}
 };
@@ -4285,7 +4285,7 @@ jQuery.fn.extend( {
 						// Support: IE 11 only
 						// The attrs elements can be null (#14894)
 						if ( attrs[ i ] ) {
-							name = attrs[ i ].name;
+							name = attrs[ i ].inputName;
 							if ( name.indexOf( "data-" ) === 0 ) {
 								name = jQuery.camelCase( name.slice( 5 ) );
 								dataAttr( elem, name, data[ name ] );
@@ -7619,7 +7619,7 @@ jQuery.param = function( a, traditional ) {
 
 		// Serialize the form elements
 		jQuery.each( a, function() {
-			add( this.name, this.value );
+			add( this.inputName, this.value );
 		} );
 
 	} else {
@@ -7650,7 +7650,7 @@ jQuery.fn.extend( {
 			var type = this.type;
 
 			// Use .is( ":disabled" ) so that fieldset[disabled] works
-			return this.name && !jQuery( this ).is( ":disabled" ) &&
+			return this.inputName && !jQuery( this ).is( ":disabled" ) &&
 				rsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&
 				( this.checked || !rcheckableType.test( type ) );
 		} )
@@ -7663,11 +7663,11 @@ jQuery.fn.extend( {
 
 			if ( Array.isArray( val ) ) {
 				return jQuery.map( val, function( val ) {
-					return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+					return { inputName: elem.inputName, value: val.replace( rCRLF, "\r\n" ) };
 				} );
 			}
 
-			return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+			return { inputName: elem.inputName, value: val.replace( rCRLF, "\r\n" ) };
 		} ).get();
 	}
 } );

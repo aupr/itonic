@@ -480,17 +480,17 @@ function it_upload_execute(obj) {
     //fail:                 => response function return the oupu from target upload url as text format.
 
     if (typeof obj == 'object') {
-        if (typeof obj.url == 'string' && typeof obj.file == 'string') {
+        if (typeof obj.targetUrl == 'string' && typeof obj.inputFileId == 'string') {
             var crt = "Error: fail function is not defined!";
             var ffc = typeof obj.fail == "function";
-            var file = document.getElementById(obj.file).files[0];
-            var fileExt = $('#' + obj.file).val().split('.').pop().toLowerCase();
+            var file = document.getElementById(obj.inputFileId).files[0];
+            var fileExt = $('#' + obj.inputFileId).val().split('.').pop().toLowerCase();
             var filesize = 10000000000; //default file size
             if (typeof obj.size == "number") filesize = obj.size;
             var fpname = "file"; // default file pass name
-            if (typeof obj.name == "string") fpname = obj.name;
+            if (typeof obj.inputName == "string") fpname = obj.inputName;
             //alert(file.name+" | "+file.size+" | "+file.type);
-            if ($('#' + obj.file).val().length == 0) {
+            if ($('#' + obj.inputFileId).val().length == 0) {
                 if (ffc) obj.fail("File input field is empty!", 3);
                 else console.log(crt);
             } else if (file.size > filesize) {
@@ -531,7 +531,7 @@ function it_upload_execute(obj) {
                         if (ffc) obj.fail(event, 2);
                         else console.log(crt);
                     }, false);
-                    ajax.open("POST", obj.url);
+                    ajax.open("POST", obj.targetUrl);
                     ajax.send(formdata);
                 } else {
                     if (ffc) obj.fail("File format is not acceptable!", 4);

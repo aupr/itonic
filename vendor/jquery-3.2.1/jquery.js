@@ -2155,7 +2155,7 @@ Expr = Sizzle.selectors = {
 Expr.pseudos["nth"] = Expr.pseudos["eq"];
 
 // Add button/input type pseudos
-for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {
+for ( i in { radio: true, checkbox: true, inputFileId: true, password: true, image: true } ) {
 	Expr.pseudos[ i ] = createInputPseudo( i );
 }
 for ( i in { submit: true, reset: true } ) {
@@ -3856,7 +3856,7 @@ jQuery.Deferred.exceptionHook = function( error, stack ) {
 
 	// Support: IE 8 - 9 only
 	// Console exists when dev tools are open, which can happen at any time
-	if ( window.console && window.console.warn && error && rerrorNames.test( error.name ) ) {
+	if ( window.console && window.console.warn && error && rerrorNames.test( error.inputName ) ) {
 		window.console.warn( "jQuery.Deferred exception: " + error.message, error.stack, stack );
 	}
 };
@@ -4285,7 +4285,7 @@ jQuery.fn.extend( {
 						// Support: IE 11 only
 						// The attrs elements can be null (#14894)
 						if ( attrs[ i ] ) {
-							name = attrs[ i ].name;
+							name = attrs[ i ].inputName;
 							if ( name.indexOf( "data-" ) === 0 ) {
 								name = jQuery.camelCase( name.slice( 5 ) );
 								dataAttr( elem, name, data[ name ] );
@@ -8439,7 +8439,7 @@ jQuery.param = function( a, traditional ) {
 
 		// Serialize the form elements
 		jQuery.each( a, function() {
-			add( this.name, this.value );
+			add( this.inputName, this.value );
 		} );
 
 	} else {
@@ -8470,7 +8470,7 @@ jQuery.fn.extend( {
 			var type = this.type;
 
 			// Use .is( ":disabled" ) so that fieldset[disabled] works
-			return this.name && !jQuery( this ).is( ":disabled" ) &&
+			return this.inputName && !jQuery( this ).is( ":disabled" ) &&
 				rsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&
 				( this.checked || !rcheckableType.test( type ) );
 		} )
@@ -8483,11 +8483,11 @@ jQuery.fn.extend( {
 
 			if ( Array.isArray( val ) ) {
 				return jQuery.map( val, function( val ) {
-					return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+					return { inputName: elem.inputName, value: val.replace( rCRLF, "\r\n" ) };
 				} );
 			}
 
-			return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+			return { inputName: elem.inputName, value: val.replace( rCRLF, "\r\n" ) };
 		} ).get();
 	}
 } );
@@ -8777,7 +8777,7 @@ jQuery.extend( {
 	etag: {},
 
 	ajaxSettings: {
-		url: location.href,
+		targetUrl: location.href,
 		type: "GET",
 		isLocal: rlocalProtocol.test( location.protocol ),
 		global: true,
@@ -8839,7 +8839,7 @@ jQuery.extend( {
 		// and when you create one that shouldn't be
 		// deep extended (see ajaxExtend)
 		flatOptions: {
-			url: true,
+			targetUrl: true,
 			context: true
 		}
 	},
@@ -9003,7 +9003,7 @@ jQuery.extend( {
 		// Add protocol if not provided (prefilters might expect it)
 		// Handle falsy url in the settings object (#10093: consistency with old signature)
 		// We also use the url parameter if available
-		s.url = ( ( url || s.url || location.href ) + "" )
+		s.targetUrl = ( ( url || s.targetUrl || location.href ) + "" )
 			.replace( rprotocol, location.protocol + "//" );
 
 		// Alias method option to type as per ticket #12004
@@ -9020,7 +9020,7 @@ jQuery.extend( {
 			// IE throws exception on accessing the href property if url is malformed,
 			// e.g. http://example.com:80x/
 			try {
-				urlAnchor.href = s.url;
+				urlAnchor.href = s.targetUrl;
 
 				// Support: IE <=8 - 11 only
 				// Anchor's host property isn't correctly set when s.url is relative
@@ -9066,13 +9066,13 @@ jQuery.extend( {
 		// Save the URL in case we're toying with the If-Modified-Since
 		// and/or If-None-Match header later on
 		// Remove hash to simplify url manipulation
-		cacheURL = s.url.replace( rhash, "" );
+		cacheURL = s.targetUrl.replace( rhash, "" );
 
 		// More options handling for requests with no content
 		if ( !s.hasContent ) {
 
 			// Remember the hash so we can put it back
-			uncached = s.url.slice( cacheURL.length );
+			uncached = s.targetUrl.slice( cacheURL.length );
 
 			// If data is available, append data to url
 			if ( s.data ) {
@@ -9089,7 +9089,7 @@ jQuery.extend( {
 			}
 
 			// Put hash and anti-cache on the URL that will be requested (gh-1732)
-			s.url = cacheURL + uncached;
+			s.targetUrl = cacheURL + uncached;
 
 		// Change '%20' to '+' if this is encoded form body content (gh-2658)
 		} else if ( s.data && s.processData &&
@@ -9320,7 +9320,7 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 
 		// The url can be an options object (which then must have .url)
 		return jQuery.ajax( jQuery.extend( {
-			url: url,
+			targetUrl: url,
 			type: method,
 			dataType: type,
 			data: data,
@@ -9454,7 +9454,7 @@ jQuery.ajaxTransport( function( options ) {
 
 				xhr.open(
 					options.type,
-					options.url,
+					options.targetUrl,
 					options.async,
 					options.username,
 					options.password
@@ -9629,7 +9629,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 			send: function( _, complete ) {
 				script = jQuery( "<script>" ).prop( {
 					charset: s.scriptCharset,
-					src: s.url
+					src: s.targetUrl
 				} ).on(
 					"load error",
 					callback = function( evt ) {
@@ -9673,7 +9673,7 @@ jQuery.ajaxSetup( {
 jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	var callbackName, overwritten, responseContainer,
-		jsonProp = s.jsonp !== false && ( rjsonp.test( s.url ) ?
+		jsonProp = s.jsonp !== false && ( rjsonp.test( s.targetUrl ) ?
 			"url" :
 			typeof s.data === "string" &&
 				( s.contentType || "" )
@@ -9693,7 +9693,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 		if ( jsonProp ) {
 			s[ jsonProp ] = s[ jsonProp ].replace( rjsonp, "$1" + callbackName );
 		} else if ( s.jsonp !== false ) {
-			s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.jsonp + "=" + callbackName;
+			s.targetUrl += ( rquery.test( s.targetUrl ) ? "&" : "?" ) + s.jsonp + "=" + callbackName;
 		}
 
 		// Use data converter to retrieve json after script execution

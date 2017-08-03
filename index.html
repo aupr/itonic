@@ -32,9 +32,9 @@
 <script>
     $("#btn-upload").click(function () {
         it.upload.execute({
-            url: "upload.php",
-            file: "file-for-upload",
-            name: "fileToUpload",
+            targetUrl: "upload.php",
+            inputFileId: "file-for-upload",
+            inputName: "fileToUpload",
             format: "mp4, jpg, srt",
             size: 1073741824,
             progress: function (val) {

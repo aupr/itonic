@@ -1,49 +1,49 @@
 {
-	"name": "jquery-ui",
+	"inputName": "jquery-ui",
 	"title": "jQuery UI",
 	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
 	"version": "1.12.1",
 	"homepage": "http://jqueryui.com",
 	"author": {
-		"name": "jQuery Foundation and other contributors",
-		"url": "https://github.com/jquery/jquery-ui/blob/1.12.1/AUTHORS.txt"
+		"inputName": "jQuery Foundation and other contributors",
+		"targetUrl": "https://github.com/jquery/jquery-ui/blob/1.12.1/AUTHORS.txt"
 	},
 	"main": "ui/widget.js",
 	"maintainers": [
 		{
-			"name": "Scott González",
+			"inputName": "Scott González",
 			"email": "scott.gonzalez@gmail.com",
-			"url": "http://scottgonzalez.com"
+			"targetUrl": "http://scottgonzalez.com"
 		},
 		{
-			"name": "Jörn Zaefferer",
+			"inputName": "Jörn Zaefferer",
 			"email": "joern.zaefferer@gmail.com",
-			"url": "http://bassistance.de"
+			"targetUrl": "http://bassistance.de"
 		},
 		{
-			"name": "Mike Sherov",
+			"inputName": "Mike Sherov",
 			"email": "mike.sherov@gmail.com",
-			"url": "http://mike.sherov.com"
+			"targetUrl": "http://mike.sherov.com"
 		},
 		{
-			"name": "TJ VanToll",
+			"inputName": "TJ VanToll",
 			"email": "tj.vantoll@gmail.com",
-			"url": "http://tjvantoll.com"
+			"targetUrl": "http://tjvantoll.com"
 		},
 		{
-			"name": "Felix Nagel",
+			"inputName": "Felix Nagel",
 			"email": "info@felixnagel.com",
-			"url": "http://www.felixnagel.com"
+			"targetUrl": "http://www.felixnagel.com"
 		},
 		{
-			"name": "Alex Schmitz",
+			"inputName": "Alex Schmitz",
 			"email": "arschmitz@gmail.com",
-			"url": "https://github.com/arschmitz"
+			"targetUrl": "https://github.com/arschmitz"
 		}
 	],
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/jquery/jquery-ui.git"
+		"targetUrl": "git://github.com/jquery/jquery-ui.git"
 	},
 	"bugs": "https://bugs.jqueryui.com/",
 	"license": "MIT",
