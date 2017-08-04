@@ -3893,7 +3893,7 @@ $.ui.focusable = function( element, hasTabindex ) {
 
 	if ( "area" === nodeName ) {
 		map = element.parentNode;
-		mapName = map.inputName;
+		mapName = map.name;
 		if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
 			return false;
 		}
@@ -6661,7 +6661,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 	_getRadioGroup: function() {
 		var group;
-		var name = this.element[ 0 ].inputName;
+		var name = this.element[ 0 ].name;
 		var nameSelector = "input[name='" + $.ui.escapeSelector( name ) + "']";
 
 		if ( !name ) {

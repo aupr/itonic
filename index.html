@@ -23,9 +23,10 @@
             <hr>
             <button id="btn-modal">iTonic Modal</button>
             <hr>
-            <input type="file" name="fileToUpload" id="file-for-upload">
+            <input type="file" multiple name="fileToUpload" id="file-for-upload">
             <button id="btn-upload">Upload</button>
-            percent uploaded <span id="upload-progress">0</span>%
+            percent uploaded <span id="upload-progress">0</span>%<br>
+            percent uploaded <span id="upload-progress-multi">0</span>%<br>
         </div>
     </div>
 
@@ -35,14 +36,25 @@
             targetUrl: "upload.php",
             inputFileId: "file-for-upload",
             inputName: "fileToUpload",
-            format: "mp4, jpg, srt",
-            size: 1073741824,
-            progress: function (val) {
-                $("#upload-progress").text(val);
+            fileExtensions: "mp4, jpg, srt",
+            fileSizeMax: 1073741824,
+            progress: function (event) {
+                //console.log(event.progress);
+                //console.log(event);
+                $("#upload-progress").text(event.progress.single);
+                $("#upload-progress-multi").text(event.progress.multi);
             },
             success: function (n,s) {
-                console.log(n);
+                //console.log(n);
+                //console.log(s);
                 console.log('success');
+            },
+            evaluate: function (c,m) {
+                console.log(c);
+                console.log(m);
+            },
+            done: function (e) {
+                console.log(e);
             },
             fail: function (e) {
                 console.log(e);

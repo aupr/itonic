@@ -4,11 +4,11 @@
         //inputFileId:                 => file input field id (only id is accepable no class or element)
         //inputName:                 => the pass name.. ie: $_FILE['name']
         //fileExtensions:               => define acceptable file formats in a string with comma saparation.
-        //fileSizeMax:                 => give maximum file size in bytes.
+        //fileSizeMax:                 => give maximum file fileSizeMax in bytes.
         //filesMax:
-        //progress:             => progress function return (0 to 100 parcent value, file size loaded, total file size, remaining file size)
-        //success:              => status function return (status number, status comment/description)
-        //fail:                 => response function return the oupu from target upload url as text format.
+        //progress:             => progress function return (0 to 100 parcent value, file fileSizeMax loaded, total file fileSizeMax, remaining file fileSizeMax)
+        //success:              => evaluate function return (evaluate number, evaluate comment/description)
+        //fail:                 => response function return the oupu from target upload url as text fileExtensions.
 
         if (typeof propertyObject !== "object") propertyObject = {};
 
@@ -17,8 +17,8 @@
                 targetUrl: undefined,
                 inputFileId: undefined,
                 inputName: "file",
-                format: undefined,
-                size: 100000000,
+                fileExtensions: undefined,
+                fileSizeMax: 100000000,
                 filesMax: 20,
                 sProgress: undefined,
                 progress: undefined,
@@ -29,8 +29,8 @@
                 targetUrl: typeof propertyObject.targetUrl === "string"?propertyObject.targetUrl:defaultObj.targetUrl,
                 inputFileId: typeof propertyObject.inputFileId === "string"?propertyObject.inputFileId:defaultObj.inputFileId,
                 inputName: typeof propertyObject.inputName === "string"?propertyObject.inputName:defaultObj.inputName,
-                format: typeof propertyObject.format === "string"?propertyObject.format:defaultObj.format,
-                size: typeof propertyObject.size === "number"?propertyObject.size:defaultObj.size,
+                fileExtensions: typeof propertyObject.fileExtensions === "string"?propertyObject.fileExtensions:defaultObj.fileExtensions,
+                fileSizeMax: typeof propertyObject.fileSizeMax === "number"?propertyObject.fileSizeMax:defaultObj.fileSizeMax,
                 filesMax: typeof propertyObject.filesMax === "number"?propertyObject.filesMax:defaultObj.filesMax,
                 sProgress: typeof propertyObject.sProgress === "function"?propertyObject.sProgress:defaultObj.sProgress,
                 progress: typeof propertyObject.progress === "function"?propertyObject.progress:defaultObj.progress,
@@ -53,11 +53,11 @@
         if (obj.targetUrl && obj.inputFileId) {
             //var crt = "Error: fail function is not defined!";
             //var ffc = typeof obj.fail === "function";
-            //var filesize = 10000000000; //default file size
-            //if (typeof obj.size === "number") filesize = obj.size;
+            //var filesize = 10000000000; //default file fileSizeMax
+            //if (typeof obj.fileSizeMax === "number") filesize = obj.fileSizeMax;
             //var fpname = "file"; // default file pass name
             //if (typeof obj.name === "string") fpname = ;
-            //alert(file.name+" | "+file.size+" | "+file.type);
+            //alert(file.name+" | "+file.fileSizeMax+" | "+file.type);
 
             var allFiles = document.getElementById(obj.inputFileId);
             var numberOfFiles = allFiles.files.length;
@@ -70,12 +70,12 @@
 
                 for (var i=0; i<numberOfFiles; i++) {
 
-                    if (allFiles.files[i].size > obj.size) {
+                    if (allFiles.files[i].fileSizeMax > obj.fileSizeMax) {
                         invokeFail(5, "Maximum file size exceeded!", {});
                         break;
-                    }else if (typeof obj.format === "string" && obj.format !== "") {
+                    }else if (typeof obj.fileExtensions === "string" && obj.fileExtensions !== "") {
                         var validExtension = false;
-                        var fileExtensions = obj.format.split(",");
+                        var fileExtensions = obj.fileExtensions.split(",");
                         fileExtensions.forEach(function (extension) {
                             if (extension.toLowerCase().trim() === allFiles.files[i].inputName.split('.').pop().toLowerCase()) {
                                 validExtension = true;
@@ -98,16 +98,16 @@
 
             if ($('#' + obj.inputFileId).val().length === 0) {
                 //invokeFail(3, "Empty field!", {});
-            } else if (file.size > obj.size) {
-                //invokeFail(5, "Maximum file size exceeded!");
+            } else if (file.fileSizeMax > obj.fileSizeMax) {
+                //invokeFail(5, "Maximum file fileSizeMax exceeded!");
             } else {
                 /*var acceptableFileFormat = false;
-                 if (typeof obj.format === "string") {
-                 var fileFormats = obj.format.split(",");
+                 if (typeof obj.fileExtensions === "string") {
+                 var fileFormats = obj.fileExtensions.split(",");
                  fileFormats.forEach(function (r) {
                  if (r.toLowerCase().trim() === fileExt) acceptableFileFormat = true;
                  });
-                 } else if (typeof obj.format === "undefined") {
+                 } else if (typeof obj.fileExtensions === "undefined") {
                  acceptableFileFormat = true;
                  }*/
                 if (acceptableFileFormat) {
@@ -142,7 +142,7 @@
                     ajax.open("POST", obj.targetUrl);
                     ajax.send(formdata);
                 } else {
-                    //invokeFail(4, "Invalid file format!", {});
+                    //invokeFail(4, "Invalid file fileExtensions!", {});
                 }
             }
         } else {

@@ -108,7 +108,7 @@ function it_modal_execute(obj) {
     //crossButtonColor:     =>Cancel button color
     //bodyHtml:             =>Body html content
     //bodyColor:            =>Modal background color
-    //width:                =>modal size in pixel. ie: "400px"
+    //width:                =>modal fileSizeMax in pixel. ie: "400px"
     //createButton:         =>Write button names you want with comma saparated.
     //buttonColor:          =>Button background color
     //buttonTextColor:      =>Button text color
@@ -295,7 +295,7 @@ function it_modal_execute(obj) {
 //itonic modal loading executor for graphical loading view
 function it_modal_onduty(obj) {
 
-    //message           =>Loading window message text in html format
+    //message           =>Loading window message text in html fileExtensions
     //messageColor      =>
     //graphics          =>Loading window animation graphics link
     //backLayerColor:   =>Modal back layer color
@@ -468,16 +468,16 @@ function it_modal_warning(bodyHtml){
     });
 }
 
-//itonic upload executor to drive the progress, success and error status
+//itonic upload executor to drive the progress, success and error evaluate
 function it_upload_execute(obj) {
     //url:                  => target upload url
     //file:                 => file input field id (only id is accepable no class or element)
     //name:                 => the pass name.. ie: $_FILE['name']
-    //format:               => define acceptable file formats in a string with comma saparation.
-    //size:                 => give maximum file size in bytes.
-    //progress:             => progress function return (0 to 100 parcent value, file size loaded, total file size, remaining file size)
-    //success:              => status function return (status number, status comment/description)
-    //fail:                 => response function return the oupu from target upload url as text format.
+    //fileExtensions:               => define acceptable file formats in a string with comma saparation.
+    //fileSizeMax:                 => give maximum file fileSizeMax in bytes.
+    //progress:             => progress function return (0 to 100 parcent value, file fileSizeMax loaded, total file fileSizeMax, remaining file fileSizeMax)
+    //success:              => evaluate function return (evaluate number, evaluate comment/description)
+    //fail:                 => response function return the oupu from target upload url as text fileExtensions.
 
     if (typeof obj == 'object') {
         if (typeof obj.targetUrl == 'string' && typeof obj.inputFileId == 'string') {
@@ -485,25 +485,25 @@ function it_upload_execute(obj) {
             var ffc = typeof obj.fail == "function";
             var file = document.getElementById(obj.inputFileId).files[0];
             var fileExt = $('#' + obj.inputFileId).val().split('.').pop().toLowerCase();
-            var filesize = 10000000000; //default file size
-            if (typeof obj.size == "number") filesize = obj.size;
+            var filesize = 10000000000; //default file fileSizeMax
+            if (typeof obj.fileSizeMax == "number") filesize = obj.fileSizeMax;
             var fpname = "file"; // default file pass name
             if (typeof obj.inputName == "string") fpname = obj.inputName;
-            //alert(file.name+" | "+file.size+" | "+file.type);
+            //alert(file.name+" | "+file.fileSizeMax+" | "+file.type);
             if ($('#' + obj.inputFileId).val().length == 0) {
                 if (ffc) obj.fail("File input field is empty!", 3);
                 else console.log(crt);
-            } else if (file.size > filesize) {
-                if (ffc) obj.fail("Maximum file size is exceeded!", 5);
+            } else if (file.fileSizeMax > filesize) {
+                if (ffc) obj.fail("Maximum file fileSizeMax is exceeded!", 5);
                 else console.log(crt);
             } else {
                 var acceptableFileFormat = false;
-                if (typeof obj.format == "string") {
-                    var fileFormats = obj.format.split(",");
+                if (typeof obj.fileExtensions == "string") {
+                    var fileFormats = obj.fileExtensions.split(",");
                     fileFormats.forEach(function (r) {
                         if (r.toLowerCase().trim() == fileExt) acceptableFileFormat = true;
                     });
-                } else if (typeof obj.format == "undefined") {
+                } else if (typeof obj.fileExtensions == "undefined") {
                     acceptableFileFormat = true;
                 }
                 if (acceptableFileFormat) {
@@ -534,7 +534,7 @@ function it_upload_execute(obj) {
                     ajax.open("POST", obj.targetUrl);
                     ajax.send(formdata);
                 } else {
-                    if (ffc) obj.fail("File format is not acceptable!", 4);
+                    if (ffc) obj.fail("File fileExtensions is not acceptable!", 4);
                     else console.log(crt);
                 }
             }
