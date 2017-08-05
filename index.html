@@ -15,55 +15,28 @@
     <script src="script/main.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="wrapper">
-            <!--<h1>iTonic Example</h1>-->
-            <hr>
-            <button id="btn-modal">iTonic Modal</button>
-            <button id="btn-modal-warning">iTonic Modal warning</button>
-            <hr>
-            <input type="file" multiple name="fileToUpload" id="file-for-upload">
-            <button id="btn-upload">Upload</button>
-            percent uploaded <span id="upload-progress">0</span>%<br>
-            percent uploaded <span id="upload-progress-multi">0</span>%<br>
+    <div class="wrapper">
+        <div class="panel panel-primary noRadius">
+            <div class="panel-heading">
+                <h3 class="panel-title">iTonic Example</h3>
+            </div>
+            <div class="panel-body">
+                <h3>iTonic URI query parser</h3><hr>
+                <a class="btn btn-primary noRadius" href="?key1=value1&key2=value1&key3=value1">Parse URI query</a>
+                <a class="btn btn-primary noRadius" href="?key1=value1&key1=value2&key2=value1">Parse URI query with array</a>
+                <br><br>
+                <input id="uri-query-consider-array" type="checkbox"><label for="uri-query-consider-array"> considerArray</label>
+                <input class="form-control noRadius" id="custom-url" style="width: 430px; display: inline-block;" value="https://www.example.com?key1=value1&key2=value1">
+                <button class="btn btn-primary noRadius" id="parse-uri-custom">Parse query from custom URL</button>
+                <br>Code:<br><code id="uri-query-code"></code><br>Output:<pre id="uri-query-view"></pre><hr>
+                <h3>iTonic MODAL/DIALOG example</h3><hr>
+            </div>
         </div>
     </div>
 
 <script>
-    $("#btn-modal-warning").click(function () {
-        it.modal.info("Do you agree?");
-    });
-    $("#btn-upload").click(function () {
-        it.upload.execute({
-            targetUrl: "upload.php",
-            inputFileId: "file-for-upload",
-            inputName: "fileToUpload",
-            fileExtensions: "mp4, jpg, srt",
-            fileSizeMax: 1073741824,
-            progress: function (event) {
-                //console.log(event.progress);
-                //console.log(event);
-                $("#upload-progress").text(event.progress.single);
-                $("#upload-progress-multi").text(event.progress.multi);
-            },
-            success: function (n, s) {
-                //console.log(n);
-                //console.log(s);
-                console.log('success');
-            },
-            evaluate: function (c, m) {
-                console.log(c);
-                console.log(m);
-            },
-            done: function (e) {
-                console.log(e);
-            },
-            fail: function (e) {
-                console.log(e);
-                console.log('fail');
-            }
-        });
-    });
+
+
 </script>
 
 </body>

@@ -1,13 +1,16 @@
 *:before, *:after, * {
   box-sizing: border-box;
+  top: 0;
+  left: 0;
   padding: 0;
   margin: 0; }
 
 .wrapper {
-  background-color: rgba(59, 139, 208, 0.43);
+  width: 800px;
+  background-color: #bdc5ff;
   margin: auto; }
-  .wrapper h1 {
-    color: white;
-    text-align: center; }
+
+.noRadius {
+  border-radius: 0; }
 
 /*# sourceMappingURL=main.css.map */

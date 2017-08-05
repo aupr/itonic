@@ -1,14 +1,17 @@
 *:before, *:after, * {
   box-sizing: border-box;
+  top:0;
+  left: 0;
   padding: 0;
   margin: 0;
 }
 
 .wrapper {
-  background-color: #2e6da4;
+  width: 800px;
+  background-color: #bdc5ff;
   margin: auto;
-  h1{
-    color: white;
-    text-align: center;
-  }
+}
+
+.noRadius {
+  border-radius: 0;
 }
