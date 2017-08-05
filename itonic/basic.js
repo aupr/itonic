@@ -93,7 +93,7 @@ function it_hold_request(arr, url) {
 
 //itonic modal html and css appending with the exixting html document
 $(function () {
-    $('body').append("<div id='itonicModal'><div id='iM_-loadspinner'></div><div id='iM_-msg'></div><div id='iM_-content'><div id='iM_-header'><span id='iM_-close'>&#10006;</span><h3></h3></div><div id='iM_-body'></div><div id='iM_-footer'><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button></div></div></div>");
+    $('body').append("<div id='itonicModal'><div id='itonicModalLoadSpinner'></div><div id='itonicModalLoadMsg'></div><div id='itonicModalContent'><div id='itonicModalHeader'><span id='itonicModalCloseSpan'>&#10006;</span><h3></h3></div><div id='itonicModalBody'></div><div id='itonicModalFooter'><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button></div></div></div>");
 });
 
 //itonic modal executor
@@ -121,11 +121,11 @@ function it_modal_execute(obj) {
     if(typeof obj != 'object') obj = {};
 
     {
-        var n_ = $('#iM_-content');
-        var h_ = $('#iM_-header');
-        var ht_ = $('#iM_-header h3');
-        var f_ = $('#iM_-footer');
-        var b_ = $('#iM_-footer button');
+        var n_ = $('#itonicModalContent');
+        var h_ = $('#itonicModalHeader');
+        var ht_ = $('#itonicModalHeader h3');
+        var f_ = $('#itonicModalFooter');
+        var b_ = $('#itonicModalFooter button');
     }
 
     // Controlling buttons
@@ -145,7 +145,7 @@ function it_modal_execute(obj) {
     if (typeof obj.headerText == 'string') ht_.html(obj.headerText);
     else console.log('Warning: headerText is undefined or not string!');
     // Add custom Boday
-    if (typeof obj.bodyHtml == 'string') $('#iM_-body').html(obj.bodyHtml);
+    if (typeof obj.bodyHtml == 'string') $('#itonicModalBody').html(obj.bodyHtml);
     else console.log('Warning: bodyHtml is undefined or not string!');
 
     // setup width of the modal
@@ -206,11 +206,11 @@ function it_modal_execute(obj) {
             }
         }
         if(typeof obj.crossButtonColor == 'string' && it_is_color(obj.crossButtonColor)){
-            $('#iM_-close').css({
+            $('#itonicModalCloseSpan').css({
                 'color': obj.crossButtonColor
             });
         }else{
-            $('#iM_-close').css({
+            $('#itonicModalCloseSpan').css({
                 'color': 'white'
             });
         }
@@ -273,16 +273,16 @@ function it_modal_execute(obj) {
         n_.css({
             'display': 'block'
         });
-        $('#iM_-loadspinner').css({
+        $('#itonicModalLoadSpinner').css({
             'display': 'none'
         });
-        $('#iM_-msg').css({
+        $('#itonicModalLoadMsg').css({
             'display': 'none'
         });
     }
 
-    $('#iM_-close').unbind('click');
-    $('#iM_-close').click(function () {
+    $('#itonicModalCloseSpan').unbind('click');
+    $('#itonicModalCloseSpan').click(function () {
         if( !(rv_ = it_modal_close()) && typeof(obj.action)=='function') obj.action(rv_);
     });
     b_.unbind('click');
@@ -312,24 +312,24 @@ function it_modal_onduty(obj) {
         });
     }
     if(typeof obj.messageColor == 'string' && it_is_color(obj.messageColor)){
-        $('#iM_-msg').css({
+        $('#itonicModalLoadMsg').css({
             'color': obj.messageColor
         });
     }else{
-        $('#iM_-msg').css({
+        $('#itonicModalLoadMsg').css({
             'color': 'white'
         });
     }
 
     if ((typeof obj.message) == 'string') {
-        $('#iM_-msg').html(obj.message);
+        $('#itonicModalLoadMsg').html(obj.message);
     }
     else {
-        $('#iM_-msg').html("Execution is in progress....<br/>Please Wait !");
+        $('#itonicModalLoadMsg').html("Execution is in progress....<br/>Please Wait !");
     }
 
     if ((typeof obj.graphics) == 'string') {
-        $('#iM_-loadspinner').css({
+        $('#itonicModalLoadSpinner').css({
             'border': 'none',
             'border-radius': '0',
             'animation': 'none',
@@ -337,7 +337,7 @@ function it_modal_onduty(obj) {
         });
     }
     else {
-        $('#iM_-loadspinner').css({
+        $('#itonicModalLoadSpinner').css({
             'border': '5px solid white'
             , 'border-top-color': '#ff7000'
             , 'border-radius': '100%'
@@ -348,34 +348,34 @@ function it_modal_onduty(obj) {
     $('#itonicModal').css({
         'display': 'block'
     });
-    $('#iM_-content').css({
+    $('#itonicModalContent').css({
         'display': 'none'
     });
-    $('#iM_-loadspinner').css({
+    $('#itonicModalLoadSpinner').css({
         'display': 'block'
     });
-    $('#iM_-msg').css({
+    $('#itonicModalLoadMsg').css({
         'display': 'block'
     });
 }
 
 //itonic modal close function to hide modal graphical view and dismiss the user interface code
 function it_modal_close() {
-    $('#iM_-header h3').text("");
-    $('#iM_-body').html("");
-    $("#iM_-footer button").css({
+    $('#itonicModalHeader h3').text("");
+    $('#itonicModalBody').html("");
+    $("#itonicModalFooter button").css({
         'display': 'none'
     });
     $('#itonicModal').css({
         'display': 'none'
     });
-    $('#iM_-content').css({
+    $('#itonicModalContent').css({
         'display': 'none'
     });
-    $('#iM_-loadspinner').css({
+    $('#itonicModalLoadSpinner').css({
         'display': 'none'
     });
-    $('#iM_-msg').css({
+    $('#itonicModalLoadMsg').css({
         'display': 'none'
     });
     return false;

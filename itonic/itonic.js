@@ -5,7 +5,7 @@
     if (helper().compareVersion(require.fn.jquery,"3.0.0")>-1) {
         factory(global, require);
     } else {
-        console.error("Minimum version of jQuery 3.0.0 is required");
+        console.error("Minimum version of jQuery 3.0.0 or higher is required!");
     }
 
 })(window, jQuery, function (window, $) {
@@ -14,11 +14,13 @@
 
     var
         itonic = {
-            version: "1.0.0"
+            version: "1.0.0",
+            location: "https://github.com/aupr/itonic"
         };
 
-
-    /* pixel verification method*/
+    /*
+    pixel verification
+    */
     itonic.isPixel = function (pixel) {
         if (!pixel) {
             return false;
@@ -43,7 +45,9 @@
         return e.style.width !== '20px';
     };
 
-    /* Color verification method*/
+    /*
+    Color verification
+    */
     itonic.isColor = function (color) {
         if (!color) {
             return false;
@@ -68,7 +72,9 @@
         return e.style.color !== "rgb(255, 255, 255)";
     };
 
-    /* Text special character to entity conversion*/
+    /*
+    String code character to entity conversion
+    */
     itonic.CCToEntity = function(text) {
         text.trim();
         var map = {
@@ -81,18 +87,18 @@
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     };
 
-    /*
+     /*
      URI query parser
-     @urlWithQuery: Don't need give any url as input for current location.
-     @isArray: it should be true if there is any array in the uri query otherwise skip it or put false
+     @customUrl: Don't need give any url as input for current location.
+     @considerArray: it should be true if there is any array in the uri query otherwise skip it or put false
      */
-    itonic.getURIQuery = function (considerArray, url) {
-        if(typeof url !== 'string') url = window.location.href;
-        var queryStart = url.indexOf("?") + 1;
-        var queryEnd = url.indexOf("#") + 1 || url.length + 1;
-        var query = url.slice(queryStart, queryEnd - 1);
+    itonic.getURIQuery = function (considerArray, customUrl) {
+        if(typeof customUrl !== 'string') customUrl = window.location.href;
+        var queryStart = customUrl.indexOf("?") + 1;
+        var queryEnd = customUrl.indexOf("#") + 1 || customUrl.length + 1;
+        var query = customUrl.slice(queryStart, queryEnd - 1);
 
-        if (query + '#' === url || query === url || query === "") return;
+        if (query + '#' === customUrl || query === customUrl || query === "") return;
 
         var pairs = query.replace(/\+/g, " ").split("&");
         var params = {};
@@ -112,17 +118,17 @@
         return params;
     };
 
-
-    //Appending hte existing html document as per library requirement
+    /*
+    Appending the existing html document body as per library requirement
+    */
     $(function () {
-        $("body").append('<div id="itonicModal"><div id="iM_-loadspinner"></div><div id="iM_-msg"></div>' +
-            '<div id="iM_-content"><div id="iM_-header"><span id="iM_-close">&#10006;</span><h3></h3></div>' +
-            '<div id="iM_-body"></div><div id="iM_-footer">' +
+        $("body").append('<div id="itonicModal"><div id="itonicModalLoadSpinner"></div><div id="itonicModalLoadMsg"></div>' +
+            '<div id="itonicModalContent"><div id="itonicModalHeader"><span id="itonicModalCloseSpan">&#10006;</span><h3></h3></div>' +
+            '<div id="itonicModalBody"></div><div id="itonicModalFooter">' +
             '<button></button><button></button><button></button><button></button><button></button>' +
             '<button></button><button></button><button></button><button></button><button></button>' +
             '</div></div></div>');
     });
-
 
     var
         modal = {},
@@ -131,55 +137,61 @@
                 return $("#itonicModal");
             },
             loadSpinner: function () {
-                return $("#iM_-loadspinner");
+                return $("#itonicModalLoadSpinner");
             },
             loadMsg: function () {
-                return $("#iM_-msg");
+                return $("#itonicModalLoadMsg");
             },
             content: function () {
-                return $("#iM_-content");
+                return $("#itonicModalContent");
             },
             header: function () {
-                return $("#iM_-header");
+                return $("#itonicModalHeader");
             },
             closeSpan: function () {
-                return $("#iM_-close");
+                return $("#itonicModalCloseSpan");
             },
             headerH3: function () {
-                return $("#iM_-header h3");
+                return $("#itonicModalHeader h3");
             },
             body: function () {
-                return $("#iM_-body");
+                return $("#itonicModalBody");
             },
             footer: function () {
-                return $("#iM_-footer");
+                return $("#itonicModalFooter");
             },
             footerButton: function () {
-                return $("#iM_-footer button");
+                return $("#itonicModalFooter button");
             },
             footerButtonChild: function (nthChild) {
-                return $("#iM_-footer button:nth-child("+nthChild+")");
+                return $("#itonicModalFooter button:nth-child("+nthChild+")");
             }
         };
 
+    /*
+    dialog/modal executor
+    */
     modal.execute = function (propertyObject) {
 
-        //headerText:           =>Header text
-        //headerTextColor:      =>Header Text Color
-        //headerColor:          =>Header Color only
-        //footerColor:          =>Footer Color only
-        //color:                =>Header Footer Combinedly set same Color
-        //crossButtonColor:     =>Cancel button color
-        //bodyHtml:             =>Body html content
-        //bodyColor:            =>Modal background color
-        //width:                =>modal fileSizeMax in pixel. ie: "400px"
-        //createButton:         =>Write button names you want with comma saparated.
-        //buttonColor:          =>Button background color
-        //buttonTextColor:      =>Button text color
-        //backLayerColor:       =>Modal back layer color
-        //draggable:            =>boolean value true or false
-        //aeris                 =>boolean value ture or false --(deprecated)
-        //action:               =>Make a function with a variable. variable will return the value of button text at onClick button. Calcel button will return boolean false.
+        /*
+         headerText:            =>Header text
+         headerTextColor:       =>Header Text Color
+         headerColor:           =>Header Color only
+         footerColor:           =>Footer Color only
+         hfColor:               =>Header Footer Combinedly set same Color
+         crossButtonEnable:     =>
+         crossButtonColor:      =>Cancel button color
+         bodyHtml:              =>Body html content
+         bodyColor:             =>Modal background color
+         width:                 =>modal fileSizeMax in pixel. ie: "400px"
+         createButton:          =>Write button names you want with comma saparated.
+         buttonColor:           =>Button background color
+         buttonTextColor:       =>Button text color
+         backLayerColor:        =>Modal back layer color
+         draggable:             =>boolean value true or false
+                                =>boolean value ture or false --(deprecated)
+         action:                =>Make a function with a variable. variable will return the value of button text at onClick button. Calcel button will return boolean false.
+         */
 
 
         if(typeof propertyObject !== "object") propertyObject = {};
@@ -190,7 +202,8 @@
                 headerTextColor: "#FFFFFF",
                 headerColor: "#919191",
                 footerColor: "#919191",
-                color: undefined,
+                hfColor: undefined,
+                crossButtonEnable: true,
                 crossButtonColor: "#FFFFFF",
                 bodyHtml: "",
                 bodyColor: "#FFFFFF",
@@ -207,7 +220,8 @@
                 headerTextColor: itonic.isColor(propertyObject.headerTextColor)?propertyObject.headerTextColor:defaultObj.headerTextColor,
                 headerColor: itonic.isColor(propertyObject.headerColor)?propertyObject.headerColor:defaultObj.headerColor,
                 footerColor: itonic.isColor(propertyObject.footerColor)?propertyObject.footerColor:defaultObj.footerColor,
-                color: itonic.isColor(propertyObject.color)?propertyObject.color:defaultObj.color,
+                hfColor: itonic.isColor(propertyObject.hfColor)?propertyObject.hfColor:defaultObj.hfColor,
+                crossButtonEnable: typeof propertyObject.crossButtonEnable === "boolean"?propertyObject.crossButtonEnable:defaultObj.crossButtonEnable,
                 crossButtonColor: itonic.isColor(propertyObject.crossButtonColor)?propertyObject.crossButtonColor:defaultObj.crossButtonColor,
                 bodyHtml: typeof propertyObject.bodyHtml === "string"?propertyObject.bodyHtml:defaultObj.bodyHtml,
                 bodyColor: itonic.isColor(propertyObject.bodyColor)?propertyObject.bodyColor:defaultObj.bodyColor,
@@ -241,14 +255,22 @@
         modalElements.content().css({"width": obj.width});
         modalElements.modal().css({"background-color": obj.backLayerColor});
         modalElements.content().css({"background-color": obj.bodyColor});
-        if (itonic.isColor(obj.color)){
-            modalElements.header().css({"background-color": obj.color});
-            modalElements.footer().css({"background-color": obj.color});
+        if (itonic.isColor(obj.hfColor)){
+            modalElements.header().css({"background-color": obj.hfColor});
+            modalElements.footer().css({"background-color": obj.hfColor});
         } else {
             modalElements.header().css({"background-color": obj.headerColor});
             modalElements.footer().css({"background-color": obj.footerColor});
         }
         modalElements.headerH3().css({"color": obj.headerTextColor});
+        if (obj.crossButtonEnable) {
+            modalElements.closeSpan().css({
+                "display": "block",
+                "color": obj.crossButtonColor
+            });
+        } else {
+            modalElements.closeSpan().css({"display": "none"});
+        }
         modalElements.closeSpan().css({"color": obj.crossButtonColor});
         modalElements.footerButton().css({"background-color": obj.buttonColor, "color": obj.buttonTextColor});
 
@@ -275,7 +297,10 @@
 
         return true;
     };
-    
+
+    /*
+    dialog/modal onDuty/Loading viewer
+    */
     modal.onDuty = function (propertyObject) {
         //message           =>Loading window message text in html fileExtensions
         //messageColor      =>
@@ -316,7 +341,7 @@
                 "border-top-color": "#ff7000",
                 "border-radius": "100%",
                 "background-image": "none",
-                "animation": "iM_Round 2s linear infinite"
+                "animation": "itonicModalRound 2s linear infinite"
             });
         }
 
@@ -327,6 +352,9 @@
 
     };
 
+    /*
+    dialog/modal execution close
+    */
     modal.close = function () {
         modalElements.headerH3().html("");
         modalElements.body().html("");
@@ -339,16 +367,131 @@
         return false;
     };
 
-    var
-        upload = {};
-    /*upload.validate = function () {
-
+    modal.exit = modal.close;
+    
+    modal.open = function (headerText, bodyHtml, hfColor, width, buttons, callback) {
+        modal.execute({
+            headerText: headerText,
+            headerTextColor: "#FFFFFF",
+            hfColor: hfColor,
+            crossButtonEnable: true,
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: bodyHtml,
+            bodyColor: "#FFFFFF",
+            width: width,
+            createButton: buttons,
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true,
+            action: callback
+        });
     };
 
-    upload.drive = function () {
+    modal.view = modal.open;
 
-    };*/
+    modal.warning = function (bodyHtml, callback) {
+        modal.execute({
+            headerText: "Warning!",
+            headerTextColor: "#FFFFFF",
+            hfColor: "#FF8800",
+            crossButtonEnable: true,
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: bodyHtml,
+            bodyColor: "#FFFFFF",
+            width: "400px",
+            createButton: "Yes, No",
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true,
+            action: function (ret) {
+                if (ret === "Yes") {
+                    if (typeof callback === "function") callback();
+                }
+                else it.modal.close();
+            }
+        });
+    };
 
+    modal.success = function (bodyHtml) {
+        modal.execute({
+            headerText: "Success!",
+            headerTextColor: "#FFFFFF",
+            hfColor: "#007E33",
+            crossButtonEnable: true,
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: bodyHtml,
+            bodyColor: "#FFFFFF",
+            width: "400px",
+            createButton: "Ok",
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true,
+            action: function () {
+                it.modal.close();
+            }
+        });
+    };
+
+    modal.info = function (bodyHtml) {
+        modal.execute({
+            headerText: "Info!",
+            headerTextColor: "#FFFFFF",
+            hfColor: "#0099CC",
+            crossButtonEnable: true,
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: bodyHtml,
+            bodyColor: "#FFFFFF",
+            width: "400px",
+            createButton: "Ok",
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true,
+            action: function () {
+                it.modal.close();
+            }
+        });
+    };
+
+    modal.error = function (bodyHtml) {
+        modal.execute({
+            headerText: "Error!",
+            headerTextColor: "#FFFFFF",
+            hfColor: "#CC0000",
+            crossButtonEnable: true,
+            crossButtonColor: "#FFFFFF",
+            bodyHtml: bodyHtml,
+            bodyColor: "#FFFFFF",
+            width: "400px",
+            createButton: "Ok",
+            buttonColor: "#FFFFFF",
+            buttonTextColor: "#444444",
+            backLayerColor: "rgba(0,0,0,0.4)",
+            draggable: true,
+            action: function () {
+                it.modal.close();
+            }
+        });
+    };
+    
+    modal.loading = function (loadingMessage, loadingImageLink, msgColor, backLayerColor) {
+        modal.onDuty({
+            message: loadingMessage,
+            messageColor: msgColor,
+            graphics: loadingImageLink,
+            backLayerColor: backLayerColor
+        });
+    };
+
+    var
+        upload = {};
+
+    /*
+    upload executor
+    */
     upload.execute = function (propertyObject) {
         //targetUrl:                  => target upload url
         //inputFileId:                 => file input field id (only id is accepable no class or element)
@@ -358,6 +501,7 @@
         //filesMax:
         //progress:             => progress function return (0 to 100 parcent value, file fileSizeMax loaded, total file fileSizeMax, remaining file fileSizeMax)
         /*
+            => event.progress property list
             single:
             loaded:
             total:
@@ -370,6 +514,7 @@
         */
         //success:              => evaluate function return (evaluate number, evaluate comment/description)
         //done:
+        //evaluate:
         //fail:                 => response function return the oupu from target upload url as text fileExtensions.
 
         if (typeof propertyObject !== "object") propertyObject = {};
@@ -512,6 +657,9 @@
         }
     };
 
+    /*
+    full screen toggle
+    */
     itonic.fullScrToggle = function (element) {
         if(!element) element = window.document.body;
         if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {

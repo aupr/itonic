@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--<meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>iTonic Example</title>
     <link rel="stylesheet" href="vendor/bootstrap-3.3.7-dist/css/bootstrap.css">
@@ -22,6 +20,7 @@
             <!--<h1>iTonic Example</h1>-->
             <hr>
             <button id="btn-modal">iTonic Modal</button>
+            <button id="btn-modal-warning">iTonic Modal warning</button>
             <hr>
             <input type="file" multiple name="fileToUpload" id="file-for-upload">
             <button id="btn-upload">Upload</button>
@@ -31,6 +30,9 @@
     </div>
 
 <script>
+    $("#btn-modal-warning").click(function () {
+        it.modal.info("Do you agree?");
+    });
     $("#btn-upload").click(function () {
         it.upload.execute({
             targetUrl: "upload.php",
@@ -44,12 +46,12 @@
                 $("#upload-progress").text(event.progress.single);
                 $("#upload-progress-multi").text(event.progress.multi);
             },
-            success: function (n,s) {
+            success: function (n, s) {
                 //console.log(n);
                 //console.log(s);
                 console.log('success');
             },
-            evaluate: function (c,m) {
+            evaluate: function (c, m) {
                 console.log(c);
                 console.log(m);
             },

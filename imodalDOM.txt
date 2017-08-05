@@ -1,67 +1,67 @@
 <div id='iM_'>
-        <div id='iM_loadspinner'></div>
-        <div id='iM_-msg'></div>
-        <div id='iM_-content'>
-            <div id='iM_-header'>
-                <span id='iM_-close'>
-                    &#10006;
-                </span>
-                <h3></h3>
-            </div>
-            <div id='iM_-body'> </div>
-            <div id='iM_-footer'>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-            </div>
+    <div id='iM_loadspinner'></div>
+    <div id='iM_-msg'></div>
+    <div id='iM_-content'>
+        <div id='iM_-header'>
+            <span id='iM_-close'>
+                &#10006;
+            </span>
+            <h3></h3>
+        </div>
+        <div id='iM_-body'> </div>
+        <div id='iM_-footer'>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
         </div>
     </div>
+</div>
 
 
 var
-            im = document.createElement("div"),
-            imLoadSpinner = document.createElement("div"),
-            imMsg = document.createElement("div"),
-            imContent = document.createElement("div"),
-            imHeader = document.createElement("div"),
-            imBody = document.createElement("div"),
-            imFooter = document.createElement("div"),
-            imClose = document.createElement("span"),
-            imH3 = document.createElement("h3"),
-            imButton = document.createElement("button");
+    im = document.createElement("div"),
+    imLoadSpinner = document.createElement("div"),
+    imMsg = document.createElement("div"),
+    imContent = document.createElement("div"),
+    imHeader = document.createElement("div"),
+    imBody = document.createElement("div"),
+    imFooter = document.createElement("div"),
+    imClose = document.createElement("span"),
+    imH3 = document.createElement("h3"),
+    imButton = document.createElement("button");
 
-        im.id = "iM_";
-        imLoadSpinner.id = "iM_loadspinner";
-        imMsg.id = "iM_-msg";
-        imContent.id = "iM_-content";
-        imHeader.id = "iM_-header";
-        imBody.id = "iM_-body";
-        imFooter.id = "iM_-footer";
-        imClose.id = "iM_-close";
-        imClose.textContent = "&#10006;";
+im.id = "iM_";
+imLoadSpinner.id = "iM_loadspinner";
+imMsg.id = "iM_-msg";
+imContent.id = "iM_-content";
+imHeader.id = "iM_-header";
+imBody.id = "iM_-body";
+imFooter.id = "iM_-footer";
+imClose.id = "iM_-close";
+imClose.textContent = "&#10006;";
 
-        im.appendChild(imLoadSpinner);
-        im.appendChild(imMsg);
-        imHeader.appendChild(imClose);
-        imHeader.appendChild(imH3);
-        imContent.appendChild(imHeader);
-        imContent.appendChild(imBody);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imFooter.appendChild(imButton);
-        imContent.appendChild(imFooter);
-        im.appendChild(imContent);
+im.appendChild(imLoadSpinner);
+im.appendChild(imMsg);
+imHeader.appendChild(imClose);
+imHeader.appendChild(imH3);
+imContent.appendChild(imHeader);
+imContent.appendChild(imBody);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imFooter.appendChild(imButton);
+imContent.appendChild(imFooter);
+im.appendChild(imContent);
