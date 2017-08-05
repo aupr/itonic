@@ -1,3 +1,4 @@
+//Interactive Tonic (itonic) for interactive web application with Javascript
 (function (global, require, factory, helper) {
 
     "use strict";
@@ -367,8 +368,14 @@
         return false;
     };
 
+    /*
+     dialog/modal execution exit
+    */
     modal.exit = modal.close;
-    
+
+    /*
+     dialog/modal open
+    */
     modal.open = function (headerText, bodyHtml, hfColor, width, buttons, callback) {
         modal.execute({
             headerText: headerText,
@@ -388,8 +395,14 @@
         });
     };
 
+    /*
+     dialog/modal view
+    */
     modal.view = modal.open;
 
+    /*
+     dialog/modal warning view
+    */
     modal.warning = function (bodyHtml, callback) {
         modal.execute({
             headerText: "Warning!",
@@ -414,6 +427,9 @@
         });
     };
 
+    /*
+     dialog/modal success view
+    */
     modal.success = function (bodyHtml) {
         modal.execute({
             headerText: "Success!",
@@ -435,6 +451,9 @@
         });
     };
 
+    /*
+     dialog/modal info view
+    */
     modal.info = function (bodyHtml) {
         modal.execute({
             headerText: "Info!",
@@ -456,6 +475,9 @@
         });
     };
 
+    /*
+     dialog/modal error view
+    */
     modal.error = function (bodyHtml) {
         modal.execute({
             headerText: "Error!",
@@ -476,7 +498,10 @@
             }
         });
     };
-    
+
+    /*
+     dialog/modal loading view
+    */
     modal.loading = function (loadingMessage, loadingImageLink, msgColor, backLayerColor) {
         modal.onDuty({
             message: loadingMessage,
