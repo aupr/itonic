@@ -277,7 +277,7 @@
 
         // Making draggable the modal section
         if (obj.draggable === true){
-            if(typeof $.fn.draggable === "function") modalElements.content().draggable({cancel : "#iM_-body"});
+            if(typeof $.fn.draggable === "function") modalElements.content().draggable({cancel : "#itonicModalBody"});
             else console.warn("Missing jQuery-ui draggable function!");
         }
 
@@ -680,6 +680,22 @@
         } else {
             console.error("targetUrl or inputFileId missing!");
         }
+    };
+
+    upload.drive = function (targetUrl, inputFileId, inputName, fileExtensions, fileSizeMax, filesMax, cbProgress, cbSuccess, cbDone, cbEvaluate, cbFail) {
+        upload.execute({
+            targetUrl: targetUrl,
+            inputFileId: inputFileId,
+            inputName: inputName,
+            fileExtensions: fileExtensions,
+            fileSizeMax: fileSizeMax,
+            filesMax: filesMax,
+            progress: cbProgress,
+            success: cbSuccess,
+            done: cbDone,
+            evaluate: cbEvaluate,
+            fail: cbFail
+        });
     };
 
     /*
