@@ -98,11 +98,11 @@
         var queryStart = customUrl.indexOf("?") + 1;
         var queryEnd = customUrl.indexOf("#") + 1 || customUrl.length + 1;
         var query = customUrl.slice(queryStart, queryEnd - 1);
+        var params = {};
 
-        if (query + '#' === customUrl || query === customUrl || query === "") return;
+        if (query + '#' === customUrl || query === customUrl || query === "") return params;
 
         var pairs = query.replace(/\+/g, " ").split("&");
-        var params = {};
 
         pairs.forEach(function(val){
             var indval = val.split("=", 2);
@@ -351,6 +351,7 @@
         modalElements.loadSpinner().css({"display": "block"});
         modalElements.loadMsg().css({"display": "block"});
 
+        return true;
     };
 
     /*
@@ -377,7 +378,7 @@
      dialog/modal open
     */
     modal.open = function (headerText, bodyHtml, hfColor, width, buttons, callback) {
-        modal.execute({
+        return modal.execute({
             headerText: headerText,
             headerTextColor: "#FFFFFF",
             hfColor: hfColor,
@@ -404,7 +405,7 @@
      dialog/modal warning view
     */
     modal.warning = function (bodyHtml, callback) {
-        modal.execute({
+        return modal.execute({
             headerText: "Warning!",
             headerTextColor: "#FFFFFF",
             hfColor: "#FF8800",
@@ -431,7 +432,7 @@
      dialog/modal success view
     */
     modal.success = function (bodyHtml) {
-        modal.execute({
+        return modal.execute({
             headerText: "Success!",
             headerTextColor: "#FFFFFF",
             hfColor: "#007E33",
@@ -455,7 +456,7 @@
      dialog/modal info view
     */
     modal.info = function (bodyHtml) {
-        modal.execute({
+        return modal.execute({
             headerText: "Info!",
             headerTextColor: "#FFFFFF",
             hfColor: "#0099CC",
@@ -479,7 +480,7 @@
      dialog/modal error view
     */
     modal.error = function (bodyHtml) {
-        modal.execute({
+        return modal.execute({
             headerText: "Error!",
             headerTextColor: "#FFFFFF",
             hfColor: "#CC0000",
@@ -503,7 +504,7 @@
      dialog/modal loading view
     */
     modal.loading = function (loadingMessage, loadingImageLink, msgColor, backLayerColor) {
-        modal.onDuty({
+        return modal.onDuty({
             message: loadingMessage,
             messageColor: msgColor,
             graphics: loadingImageLink,
@@ -683,7 +684,7 @@
     };
 
     upload.drive = function (targetUrl, inputFileId, inputName, fileExtensions, fileSizeMax, filesMax, cbProgress, cbSuccess, cbDone, cbEvaluate, cbFail) {
-        upload.execute({
+        return upload.execute({
             targetUrl: targetUrl,
             inputFileId: inputFileId,
             inputName: inputName,
@@ -698,6 +699,7 @@
         });
     };
 
+    upload.run = upload.drive;
     /*
     full screen toggle
     */
