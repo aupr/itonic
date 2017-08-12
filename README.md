@@ -1,5 +1,4 @@
 
-
 # iTonic
 This is a simple javascript library which is very helpful to make a dynamic or interactive web applications.
 
@@ -45,7 +44,95 @@ This is a simple javascript library which is very helpful to make a dynamic or i
 - `[iTonic = itonic = it]*`
 - `(*.)[dialog = modal]**`
 - `(**.)[open = view]`
+- `(**.)[close = exit]`
 - `(*.upload.)[drive = run]`
+
+
+### Function Call!
+iTonic Upload
+```
+it.upload.execute({
+    targetUrl: undefined,
+    inputFileId: undefined,
+    inputName: "file",
+    fileExtensions: undefined,
+    fileSizeMax: 100000000,
+    filesMax: 20,
+    progress: undefined,
+    success: undefined,
+    done: undefined,
+    evaluate: undefined,
+    fail: undefined
+});
+```
+iTonic Modal
+```
+it.modal.execute({
+    headerText: "Dialog Form.",
+    headerTextColor: "#FFFFFF",
+    headerColor: "#919191",
+    footerColor: "#919191",
+    hfColor: undefined,
+    crossButtonEnable: true,
+    crossButtonColor: "#FFFFFF",
+    bodyHtml: "",
+    bodyColor: "#FFFFFF",
+    width: "400px",
+    createButton: undefined,
+    buttonColor: "#FFFFFF",
+    buttonTextColor: "#444444",
+    backLayerColor: "rgba(0,0,0,0.4)",
+    draggable: true,
+    action: undefined
+});
+
+it.modal.open(headerText, bodyHtml, hfColor, width, buttons, callback);
+
+it.modal.warning(bodyHtml, callback);
+
+it.modal.success(bodyHtml);
+
+it.info.success(bodyHtml);
+
+it.error.success(bodyHtml);
+
+it.modal.close();
+
+it.modal.onDuty({
+    message: "Execution is in progress....<br/>Please Wait !",
+    messageColor: "#FFFFFF",
+    graphics: undefined,
+    backLayerColor: "rgba(0,0,0,0.4)"
+});
+
+it.modal.loading(loadingMessage, loadingImageLink, msgColor, backLayerColor);
+```
+
+iTonic Pixel Verification
+```
+it.isPixel(pixel);
+```
+
+iTonic Color Verification
+```
+it.isColor(Color);
+```
+
+iTonic Code Character to Entity
+```
+it.CCToEntity(text);
+```
+
+iTonic URI Query Parser
+```
+it.getURIQuery(considerArray, customUrl);
+```
+
+Full Screen Toggle
+```
+it.fullScrToggle(element);
+```
+
 ### License
 > iTonic is a free javascript library! You can redistribute it and/or modify it under the terms of the MIT License. Please read the LICENSE file for more details.
 
