@@ -27,7 +27,7 @@ This is a simple javascript library which is very helpful to make a dynamic or i
 - `boolean it.isPixel(string color)`
 - `string it.CCToEntity(string text)`
 - `object it.getURIQuery([boolean considerArray, string customUrl])`
-- `boolean it.fullScrToggle(object element)`
+- `boolean it.fullScrToggle([object element])`
 - `boolean it.dialog.execute(object propertyObject)`
 - `boolean it.dialog.open(string headerText, string bodyHtml, string hfColor, string width, string buttons, function callback)`
 - `boolean it.dialog.warning(string bodyHtml, string callback)`
